@@ -1,20 +1,29 @@
 package com.betsy.reasonstohire.model;
 
+import jakarta.persistence.*;
+
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reason {
-    private String id;
-    private String title;
-    private String type;
-    private String explanation;
-//    public Reason(String id, String title, String type, String explanation) {
-//        this.id = id;
-//        this.title = title;
-//        this.type = type;
-//        this.explanation = explanation;
-//    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) // auto-generates UUID
+    private UUID id;
+    private String reason;
 
+    @Enumerated(EnumType.STRING)
+    private ReasonType reason_type;
+    private String explanation;
+
+    private String submittedBy;
+    private String submittedByLink;
+    private String relationship;
+    private boolean submittedByOthers;
+
+    private boolean approved = false;
 }

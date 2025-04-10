@@ -1,11 +1,11 @@
 package com.betsy.reasonstohire.controller;
 
 import com.betsy.reasonstohire.model.Reason;
+import com.betsy.reasonstohire.model.ReasonType;
 import com.betsy.reasonstohire.service.ReasonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +24,22 @@ public class ReasonController {
     @GetMapping
     public List<Reason> getAllReasons() {
         return reasonService.getAllReasons();
+    }
+
+    // POST: Add a new reason
+    @PostMapping
+    public ResponseEntity<Reason> addReason(@RequestBody Reason reason) {
+        return ResponseEntity.ok(reasonService.saveReason(reason));
+    }
+
+    // GET: Fetch all approved reasons
+    @GetMapping
+    public ResponseEntity<List<Reason>> getApprovedReasons() {
+        return ResponseEntity.ok(reasonService.getApprovedReasons());
+    }
+
+    @GetMapping("/filter")
+    public List<Reason> getReasonsByType(@RequestParam ReasonType type) {
+        return reasonService.getReasonsByType(type);
     }
 }

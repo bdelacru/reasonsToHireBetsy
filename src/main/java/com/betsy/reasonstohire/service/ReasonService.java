@@ -1,6 +1,9 @@
 package com.betsy.reasonstohire.service;
 
 import com.betsy.reasonstohire.model.Reason;
+import com.betsy.reasonstohire.model.ReasonType;
+import com.betsy.reasonstohire.repository.ReasonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
@@ -10,21 +13,27 @@ import java.util.Random;
 
 @Service
 public class ReasonService {
+    @Autowired
+    private ReasonRepository reasonRepository;
 
-    private List<Reason> reasons = new ArrayList<>();
-
-    @PostConstruct
-    public void init(){
-        reasons.add(new Reason("1", "Strong communicator", "serious", "Explains things clearly to non-tech folks."));
-        reasons.add(new Reason("2", "Owns 3 types of highlighters", "silly", "Color-coded problem solver."));
+    public List<Reason> getAllReasons() {
+        return reasonRepository.findAll();
     }
 
-    public Reason getRandomReason(){
-        Random rand = new Random();
-        return reasons.get(rand.nextInt(reasons.size()));
+    public Reason getRandomReason() {
+        List<Reason> all = reasonRepository.findAll();
+        return all.get(new Random().nextInt(all.size()));
     }
 
-    public List<Reason> getAllReasons(){
-        return reasons;
+    public Reason saveReason(Reason reason) {
+        return reasonRepository.save(reason);
+    }
+
+    public List<Reason> getApprovedReasons() {
+        return reasonRepository.findByApprovedTrue();
+    }
+
+    public List<Reason> getReasonsByType(ReasonType type) {
+        return reasonRepository.findByTypeAndApprovedTrue(type);
     }
 }
