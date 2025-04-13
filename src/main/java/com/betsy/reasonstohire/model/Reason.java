@@ -19,6 +19,7 @@ public class Reason {
     @Enumerated(EnumType.STRING)
     private ReasonType reason_type;
     private String explanation;
+    private String imageUrl;
 
     private String submittedBy;
     private String submittedByLink;
