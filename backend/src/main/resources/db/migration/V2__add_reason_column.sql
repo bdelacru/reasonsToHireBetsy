@@ -1,0 +1,1 @@
+ALTER TABLE reason ADD COLUMN reason VARCHAR(255);
