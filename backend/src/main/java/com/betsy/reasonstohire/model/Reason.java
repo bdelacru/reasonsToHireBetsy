@@ -17,7 +17,7 @@ public class Reason {
     private String reason;
 
     @Enumerated(EnumType.STRING)
-    private ReasonType reason_type;
+    private ReasonType reasonType;
     private String explanation;
     private String imageUrl;
 

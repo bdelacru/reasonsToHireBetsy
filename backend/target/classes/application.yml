@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reasons_db
+    username: postgres
+    password: MandM1519!
+    spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+cloudinary:
+  cloud-name: djrlttvps
+  api-key: 265685665395924
+  api-secret: 5vqv82Fe8COtED7lZ7loggtqjVg

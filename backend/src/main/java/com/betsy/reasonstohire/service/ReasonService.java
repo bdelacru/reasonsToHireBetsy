@@ -21,9 +21,17 @@ public class ReasonService {
     }
 
     public Reason getRandomReason() {
-        List<Reason> all = reasonRepository.findAll();
-        return all.get(new Random().nextInt(all.size()));
+        List<Reason> reasons = reasonRepository.findByApprovedTrue();
+    
+        if (reasons.isEmpty()) {
+            throw new IllegalStateException("No approved reasons found in the database.");
+        }
+    
+        Random random = new Random();
+        int index = random.nextInt(reasons.size());
+        return reasons.get(index);
     }
+    
 
     public Reason saveReason(Reason reason) {
         return reasonRepository.save(reason);
@@ -33,7 +41,7 @@ public class ReasonService {
         return reasonRepository.findByApprovedTrue();
     }
 
-    public List<Reason> getReasonsByType(ReasonType type) {
-        return reasonRepository.findByTypeAndApprovedTrue(type);
+    public List<Reason> getReasonsByType(ReasonType reasonType) {
+        return reasonRepository.findByReasonTypeAndApprovedTrue(reasonType);
     }
 }

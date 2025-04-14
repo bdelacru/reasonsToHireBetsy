@@ -13,6 +13,6 @@ public interface ReasonRepository extends JpaRepository<Reason, UUID> {
     List<Reason> findByApprovedTrue();
     List<Reason> findByApprovedFalse();
 
-    List<Reason> findByTypeAndApprovedTrue(ReasonType type);
+    List<Reason> findByReasonTypeAndApprovedTrue(ReasonType reasonType);
 //List<Reason> findBySubmittedByOthersTrueAndApprovedTrue();
 }

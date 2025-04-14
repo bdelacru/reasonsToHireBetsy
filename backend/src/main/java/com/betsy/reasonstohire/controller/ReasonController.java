@@ -32,13 +32,11 @@ public class ReasonController {
         return reasonService.getAllReasons();
     }
 
-    // POST: Add a new reason
     @PostMapping
     public ResponseEntity<Reason> addReason(@RequestBody Reason reason) {
         return ResponseEntity.ok(reasonService.saveReason(reason));
     }
 
-    // GET: Fetch all approved reasons
     @GetMapping("/approved")
     public ResponseEntity<List<Reason>> getApprovedReasons() {
         return ResponseEntity.ok(reasonService.getApprovedReasons());
