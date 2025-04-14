@@ -1,17 +1,18 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/reasons_db
-    username: postgres
-    password: MandM1519!
-    spring:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:reasons_db}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+
 cloudinary:
-  cloud-name: djrlttvps
-  api-key: 265685665395924
-  api-secret: 5vqv82Fe8COtED7lZ7loggtqjVg
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
