@@ -1,0 +1,9 @@
+com\betsy\reasonstohire\service\CloudinaryService.class
+com\betsy\reasonstohire\config\CorsConfig$1.class
+com\betsy\reasonstohire\ReasonsToHireApplication.class
+com\betsy\reasonstohire\config\CorsConfig.class
+com\betsy\reasonstohire\controller\ReasonController.class
+com\betsy\reasonstohire\repository\ReasonRepository.class
+com\betsy\reasonstohire\service\ReasonService.class
+com\betsy\reasonstohire\model\ReasonType.class
+com\betsy\reasonstohire\model\Reason.class
