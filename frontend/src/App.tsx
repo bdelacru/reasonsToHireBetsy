@@ -29,7 +29,7 @@ function App() {
   const getRandomReason = async () => {
     setLoading(true)
     try {
-      const res = await axios.get<Reason>('http://localhost:8080/api/reasons/random')
+      const res = await axios.get<Reason>(`${import.meta.env.VITE_API_URL}/api/reasons/random`);
       setReason(res.data)
     } catch (error) {
       console.error("Error fetching reason:", error)
