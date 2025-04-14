@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+/*.iml
+/.vscode/
+/*.classpath
+/*.project
+
+# Maven target directory
+/target/
