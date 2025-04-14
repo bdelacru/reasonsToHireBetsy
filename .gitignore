@@ -1,1 +1,9 @@
 backend/target/classes/application.yml
+.env
+backend/target/*
+backend/target/classes/*
+backend/target/test-classes/*
+backend/target/maven-status/*
+backend/target/surefire-reports/*
+backend/target/site/*   
+backend/target/maven-status/maven-compiler-plugin/compile/default-compile/*
