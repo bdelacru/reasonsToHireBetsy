@@ -14,6 +14,8 @@ interface Reason {
 function App() {
   const [reason, setReason] = useState<Reason | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [affirmation, setAffirmation] = useState<string | null>(null);
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   const getEmoji = (type: string) => {
     switch (type) {
@@ -26,11 +28,28 @@ function App() {
     }
   }
 
+  const magic8BallAnswers = [
+    "Without a doubt.",
+    "Absolutely yes.",
+    "Most definitely.",
+    "You’d be crazy not to.",
+    "Signs point to yes.",
+    "As certain as the sun rising.",
+    "The universe agrees.",
+    "1000% yes.",
+    "Heck yeah.",
+    "Yes, yes, YES!"
+  ];
+  
+
   const getRandomReason = async () => {
     setLoading(true)
     try {
-      const res = await axios.get<Reason>(`${import.meta.env.VITE_API_URL}/api/reasons/random`);
+      const res = await axios.get<Reason>(`${API_BASE}/api/reasons/random`);
       setReason(res.data)
+      const randomAnswer = magic8BallAnswers[Math.floor(Math.random() * magic8BallAnswers.length)];
+      setAffirmation(randomAnswer);
+      
     } catch (error) {
       console.error("Error fetching reason:", error)
     } finally {
@@ -51,11 +70,14 @@ function App() {
       />
   
       <div className="magic-ball">8</div>
-      <h1>Reasons to Hire Betsy</h1>
+      <h1>Is Betsy your next great hire?</h1>
       <button onClick={getRandomReason} disabled={loading}>
         {loading ? 'Shaking...' : 'Shake the Magic 8-Ball'}
       </button>
   
+      <h2 className="text-xl mt-6 italic text-purple-600 text-center fade-in">
+  “{affirmation}”
+</h2>
       {reason && (
         <div className="card">
           <h2>{reason.title}</h2>
