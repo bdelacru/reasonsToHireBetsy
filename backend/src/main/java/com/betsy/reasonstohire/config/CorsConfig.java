@@ -14,12 +14,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns(
-                                "https://reasonstohirebetsy.com",
-                                "https://reasonstohirebetsy.vercel.app",
-                                "http://localhost:5173")
+                        .allowedOriginPatterns("https://reasonstohirebetsy.com")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
+                        .exposedHeaders("Access-Control-Allow-Origin")
                         .allowCredentials(true);
             }
         };
