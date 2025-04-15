@@ -2,7 +2,7 @@
 
 Welcome to **Reasons to Hire Betsy**, a whimsical full-stack app built to showcase Betsy's experience, personality, and technical strengths—all through the fun of a Magic 8-Ball interaction.
 
-![Project Screenshot](./frontend/public/cover-screenshot.png)
+![![alt text](Website example))](./frontend/src/assets/websiteSample.png)
 
 🔗 **Live Site**: [https://reasonstohirebetsy.com](https://reasonstohirebetsy.com)  
 📘 **Swagger Docs**: [https://reasonstohirebetsy.onrender.com/swagger-ui/index.html](https://reasonstohirebetsy.onrender.com/swagger-ui/index.html)
