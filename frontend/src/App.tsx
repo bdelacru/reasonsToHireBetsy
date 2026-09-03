@@ -169,7 +169,7 @@ function App() {
           <a href="#work">Work</a>
           <a href="#experience">Experience</a>
           <a href="#about">About</a>
-          <a href="/Betsy_De_La_Cruz_Resume.pdf" target="_blank" rel="noreferrer">
+          <a href="/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">
             Résumé
           </a>
         </nav>
