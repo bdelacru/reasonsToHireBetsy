@@ -189,7 +189,7 @@ function App() {
               <a className="button button-primary" href="#work">
                 See how I work <span aria-hidden="true">↓</span>
               </a>
-              <a className="button button-secondary" href="/Betsy_De_La_Cruz_Resume.pdf" target="_blank" rel="noreferrer">
+              <a className="button button-secondary" href="/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">
                 View résumé
               </a>
             </div>
@@ -379,7 +379,7 @@ function App() {
           <div className="contact-actions">
             <a className="button button-primary" href="mailto:betsydelacru@gmail.com">Email me</a>
             <a className="text-link" href="https://github.com/bdelacru" target="_blank" rel="noreferrer">GitHub ↗</a>
-            <a className="text-link" href="/Betsy_De_La_Cruz_Resume.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
+            <a className="text-link" href="/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
           </div>
         </section>
       </main>
