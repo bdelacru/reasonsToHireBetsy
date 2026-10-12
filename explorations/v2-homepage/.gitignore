@@ -1,0 +1,3 @@
+# Generated photo copies (run make-photos.ps1); never commit photos
+photos/
+screenshots/

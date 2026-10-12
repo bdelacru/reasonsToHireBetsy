@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept C · Interactive Engineering Studio · Betsy De La Cruz (prototype)</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* EXPLORATORY PROTOTYPE. Colors, fonts and layout are not approved production choices. */
+:root {
+  --night: #191431;      /* hero and AI section */
+  --night-2: #241d45;
+  --paper: #f7f3ec;
+  --ink: #191431;
+  --ink-soft: #4a4560;
+  --lime: #c8f169;
+  --coral: #ff7a5c;
+  --sky: #86cbff;
+  --lilac: #bba8ff;
+  --violet-text: #5a3fc0; /* small accent text on paper */
+  --line: #d9d1c4;
+  --display: 'Familjen Grotesk', system-ui, sans-serif;
+  --body: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.6 var(--body); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-underline-offset: .18em; }
+:focus-visible { outline: 3px solid var(--violet-text); outline-offset: 3px; border-radius: 4px; }
+.dark :focus-visible { outline-color: var(--lime); }
+.skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 10; background: var(--lime); color: var(--ink); padding: .6rem 1rem; font-weight: 600; }
+.skip-link:focus { top: 1rem; }
+.proto-bar { background: #000; color: #fff; font-size: .8125rem; padding: .45rem clamp(1rem, 4vw, 3rem); display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap; }
+.proto-bar a { color: var(--lime); }
+.proto-bar :focus-visible { outline-color: var(--lime); }
+.wrap { width: min(1220px, 100% - 2 * clamp(1rem, 4vw, 3rem)); margin-inline: auto; }
+.mono { font: 500 .8125rem/1.4 var(--mono); letter-spacing: .02em; }
+
+/* Header + hero share the dark surface */
+.dark { background: var(--night); color: #f3f0ff; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-block: 1.1rem; }
+.brand { font: 700 1.2rem/1 var(--display); text-decoration: none; display: inline-flex; align-items: center; gap: .6rem; }
+.brand i { width: 14px; height: 14px; border-radius: 50%; background: var(--lime); box-shadow: 18px 0 0 var(--coral), 36px 0 0 var(--sky); margin-right: 40px; }
+.site-header ul { list-style: none; margin: 0; padding: 0; display: flex; gap: .25rem 1.25rem; flex-wrap: wrap; align-items: center; }
+.site-header nav a { text-decoration: none; font-weight: 500; padding: .4rem 0; display: inline-block; }
+.site-header nav a:hover { color: var(--lime); }
+.site-header nav .resume { border: 1.5px solid var(--lime); color: var(--lime); padding: .4rem .9rem; border-radius: 6px; }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); padding-block: clamp(2.5rem, 6vw, 5rem) clamp(3rem, 6vw, 5rem); align-items: start; }
+.hero .mono { color: var(--lime); margin: 0 0 1.25rem; }
+.hero h1 { font: 700 clamp(2.6rem, 6vw, 5rem)/.98 var(--display); letter-spacing: -.03em; margin: 0; }
+.hero h1 .name { display: block; color: #fff; }
+.hero h1 .what { display: block; font-weight: 500; color: var(--lilac); }
+.hero .lede { font-size: 1.15rem; color: #d9d4ee; max-width: 46ch; margin: 1.5rem 0 0; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.3rem; border-radius: 8px; font-weight: 600; text-decoration: none; border: 2px solid currentColor; min-height: 48px; }
+.btn-primary { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.btn-primary:hover { background: #fff; border-color: #fff; }
+.btn-ghost:hover { background: var(--night-2); }
+
+/* Layer explorer: tabs that map skills to real examples */
+.explorer { background: var(--night-2); border: 1px solid #3c3466; border-radius: 14px; padding: 1.25rem; }
+.explorer h2 { font: 600 1rem/1.3 var(--display); margin: 0 0 .25rem; }
+.explorer > p { margin: 0 0 1rem; font-size: .9375rem; color: #cfc8ea; }
+.layers { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 1rem; }
+.tablist { display: flex; flex-direction: column; gap: 4px; position: relative; }
+.tablist::before { content: ""; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 2px; background: #4a417a; }
+.tablist button { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: .6rem; padding: .45rem .6rem; border-radius: 6px; cursor: pointer; font: 500 .9375rem var(--body); color: #e4dff7; position: relative; min-height: 36px; }
+.tablist button::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #8d84b8; background: var(--night-2); flex: none; position: relative; z-index: 1; }
+.tablist button:hover { background: #2f2758; }
+.tablist button[aria-selected="true"] { background: var(--lime); color: var(--ink); font-weight: 600; }
+.tablist button[aria-selected="true"]::before { border-color: var(--ink); background: var(--ink); }
+.tablist button:focus-visible { outline: 3px solid var(--sky); outline-offset: 1px; }
+.panel { background: var(--night); border-radius: 10px; padding: 1.1rem 1.2rem; min-height: 100%; border-left: 4px solid var(--lime); }
+.panel h3 { font: 700 1.3rem/1.2 var(--display); margin: 0 0 .5rem; color: #fff; }
+.panel ul { margin: 0; padding-left: 1.1rem; }
+.panel li { margin-bottom: .4rem; }
+.panel .where { color: var(--sky); }
+.panel:focus-visible { outline-color: var(--sky); }
+
+/* Light sections with a signal rail */
+.section { padding-block: clamp(3.5rem, 8vw, 6rem); position: relative; }
+.rail { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: clamp(1rem, 3vw, 2rem); }
+.rail-mark { position: relative; }
+.rail-mark::before { content: ""; position: absolute; left: 50%; top: 0; bottom: -6rem; width: 2px; background: var(--line); transform: translateX(-50%); }
+.rail-mark span { position: sticky; top: 1.5rem; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--c, var(--lime)); color: var(--ink); font: 500 .8125rem var(--mono); z-index: 1; }
+.label { font: 500 .8125rem var(--mono); color: var(--violet-text); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 .5rem; }
+h2.title { font: 700 clamp(1.9rem, 4vw, 3.1rem)/1.04 var(--display); letter-spacing: -.02em; margin: 0 0 1rem; max-width: 22ch; }
+.section p { max-width: 64ch; }
+
+/* Trace: the "add search" story as a horizontal sequence */
+.trace { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1.5rem; margin-top: 2rem; align-items: stretch; }
+.ticket { background: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 1.2rem; display: flex; flex-direction: column; justify-content: center; }
+.ticket p { margin: .25rem 0 0; font: 700 1.8rem/1.1 var(--display); }
+.qs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; counter-reset: q; }
+.qs li { counter-increment: q; background: #fff; border-radius: 10px; padding: .9rem 1rem; border-top: 5px solid var(--c); font-weight: 500; }
+.qs li::before { content: "Q" counter(q); display: block; font: 500 .75rem var(--mono); color: var(--ink-soft); margin-bottom: .25rem; }
+.qs li:nth-child(3n+1) { --c: var(--coral); } .qs li:nth-child(3n+2) { --c: var(--sky); } .qs li:nth-child(3n) { --c: var(--lime); }
+.principle { margin-top: 1.5rem; font: 700 1.35rem var(--display); }
+.stack { list-style: none; padding: 0; margin: 1.5rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.stack li { font: 500 .8125rem var(--mono); border: 1.5px solid var(--ink); border-radius: 4px; padding: .2rem .5rem; }
+
+/* Experience: spans drawn to scale by date */
+.timeline { margin-top: 2rem; display: grid; gap: 2.25rem; }
+.axis { display: grid; grid-template-columns: repeat(8, 1fr); font: 500 .75rem var(--mono); color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); padding-bottom: .3rem; }
+.job { display: grid; grid-template-columns: repeat(96, 1fr); align-items: center; row-gap: .5rem; }
+.bar { height: 14px; border-radius: 7px; background: var(--c); }
+.job .info { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 1.5rem; }
+.job h3 { font: 700 1.4rem/1.15 var(--display); margin: 0; }
+.job .role { margin: .1rem 0 0; color: var(--ink-soft); font-size: .9375rem; }
+.job ul { margin: 0; padding-left: 1.1rem; }
+
+/* Case files with disclosure */
+.cases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2rem; }
+.case { background: #fff; border-radius: 12px; padding: 1.4rem; border: 1.5px solid var(--line); display: flex; flex-direction: column; gap: .5rem; position: relative; overflow: hidden; }
+.case::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; background: var(--c); }
+.case h3 { font: 700 1.3rem/1.2 var(--display); margin: .25rem 0; }
+.case .state { margin-top: auto; font: 500 .8125rem var(--mono); display: inline-flex; gap: .4rem; align-items: center; }
+.case .state::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); outline: 1.5px solid var(--ink); }
+details { border-top: 1px solid var(--line); padding-top: .6rem; }
+summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+details ul { margin: .5rem 0 0; padding-left: 1.1rem; font-size: .9375rem; }
+
+/* AI section (dark) */
+.ai-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.ai .label { color: var(--lime); }
+.ai p { color: #d9d4ee; }
+.ai blockquote { margin: 1.5rem 0; font: 600 clamp(1.4rem, 2.6vw, 2rem)/1.2 var(--display); color: #fff; border-left: 4px solid var(--coral); padding-left: 1.1rem; }
+.flow { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.flow li { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 1rem; align-items: center; background: var(--night-2); border-radius: 10px; padding: .85rem 1rem; border-left: 4px solid var(--c); }
+.flow strong { font: 700 1.05rem var(--display); color: #fff; }
+.flow li:nth-child(1) { --c: var(--sky); } .flow li:nth-child(2) { --c: var(--lime); } .flow li:nth-child(3) { --c: var(--coral); } .flow li:nth-child(4) { --c: var(--lilac); }
+
+/* Off-call: photography arrives as a three-stage pipeline */
+.pipeline { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; counter-reset: s; }
+.pipeline li { counter-increment: s; position: relative; }
+.pipeline li:not(:last-child)::after { content: "→"; position: absolute; right: -1.05rem; top: 38%; font: 700 1.4rem var(--display); color: var(--ink-soft); }
+.pipeline figure { margin: 0; background: #fff; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--line); }
+.pipeline img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+.pipeline figcaption { padding: .8rem 1rem 1rem; }
+.pipeline figcaption .mono { color: var(--violet-text); display: block; }
+.pipeline figcaption strong { font: 700 1.1rem var(--display); }
+.extras { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 1.5rem; margin-top: 2.5rem; align-items: center; }
+.extras img { border-radius: 12px; }
+.chips { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+.chips li { background: #fff; border-radius: 10px; padding: .9rem 1rem; border: 1.5px solid var(--line); }
+.chips strong { display: block; font: 700 1.05rem var(--display); }
+
+/* Contact */
+.contact { background: var(--lime); }
+.contact h2 { font: 700 clamp(2.2rem, 5.5vw, 4.4rem)/1 var(--display); letter-spacing: -.03em; margin: 0 0 1rem; max-width: 16ch; }
+.contact .btn { color: var(--ink); }
+.contact .btn-primary { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+.contact .btn-primary:hover { background: var(--night-2); }
+.contact :focus-visible { outline-color: var(--ink); }
+.placeholder { font: 500 .8125rem var(--mono); border: 1.5px dashed var(--ink); padding: .2rem .5rem; border-radius: 4px; background: #fff; }
+footer { padding-block: 2rem; font-size: .9375rem; }
+footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+/* Progressive reveal */
+.reveal { transition: opacity .6s ease, transform .6s ease; }
+.js .reveal:not(.in) { opacity: 0; transform: translateY(24px); }
+.pipeline .reveal:nth-child(2) { transition-delay: .12s; } .pipeline .reveal:nth-child(3) { transition-delay: .24s; }
+@media (prefers-reduced-motion: reduce) { .reveal { transition: none; } .js .reveal:not(.in) { opacity: 1; transform: none; } }
+
+@media (max-width: 1000px) {
+  .hero, .ai-grid { grid-template-columns: 1fr; }
+  .cases { grid-template-columns: 1fr 1fr; }
+  .qs { grid-template-columns: 1fr 1fr; }
+  .trace { grid-template-columns: 1fr; }
+  .job .info { grid-template-columns: 1fr; gap: .5rem; }
+}
+@media (max-width: 680px) {
+  .rail { grid-template-columns: 1fr; }
+  .rail-mark { display: none; }
+  .layers { grid-template-columns: 1fr; }
+  .tablist { flex-direction: row; flex-wrap: wrap; }
+  .tablist::before { display: none; }
+  .cases, .qs, .chips, .extras { grid-template-columns: 1fr; }
+  .pipeline { grid-template-columns: 1fr; gap: 2rem; }
+  .pipeline li:not(:last-child)::after { content: "↓"; right: auto; left: 50%; top: auto; bottom: -1.9rem; }
+  .flow li { grid-template-columns: 1fr; gap: .1rem; }
+  .axis { font-size: .625rem; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="proto-bar" role="note"><span><strong>Prototype</strong> · Concept C of 3: Interactive Engineering Studio · exploratory, not an approved design</span><a href="index.html">All concepts</a></div>
+
+<div class="dark">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="#top"><i aria-hidden="true"></i>Betsy De La Cruz</a>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#approach">Approach</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#ai">AI</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a class="resume" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">Résumé</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<main id="main">
+  <div class="dark">
+    <div class="wrap hero" id="top">
+      <div>
+        <p class="mono">Full-stack software engineer · Chicago · 7+ years</p>
+        <h1><span class="name">Betsy De La Cruz</span><span class="what">I follow the problem wherever it goes.</span></h1>
+        <p class="lede">From the user experience to the API, the data, the infrastructure and what production is actually doing. Currently a Software Engineer II at Sinch, building for Next Generation 911.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">View résumé</a>
+          <a class="btn btn-ghost" href="mailto:betsydelacru@gmail.com">Email me</a>
+        </div>
+      </div>
+
+      <section class="explorer" aria-labelledby="explorer-h">
+        <h2 id="explorer-h">Explore my work by system layer</h2>
+        <p>Pick a layer to see where I’ve worked on it.</p>
+        <div class="layers">
+          <div class="tablist" role="tablist" aria-label="System layers" aria-orientation="vertical"></div>
+          <div class="panel" role="tabpanel" id="layer-panel" tabindex="0"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <section class="section" id="approach" aria-labelledby="h-approach">
+    <div class="wrap rail">
+      <div class="rail-mark" aria-hidden="true"><span style="--c: var(--coral)">01</span></div>
+      <div>
+        <p class="label">Approach</p>
+        <h2 class="title" id="h-approach">I tend to ask one more question.</h2>
+        <p>A feature request is usually the beginning of the conversation, not the end of it. Before I build, I want to understand what someone is actually trying to accomplish.</p>
+        <div class="trace reveal">
+          <div class="ticket"><span class="mono">The ticket says</span><p>“Add search.”</p></div>
+          <ol class="qs" aria-label="Questions I ask before implementing search">
+            <li>What are users actually trying to find?</li>
+            <li>Which fields should be searchable?</li>
+            <li>Exact, partial, or case-insensitive matching?</li>
+            <li>Would filters communicate intent more clearly?</li>
+            <li>Can someone use it fully with a keyboard?</li>
+            <li>What happens when nothing matches?</li>
+          </ol>
+        </div>
+        <p class="principle">Good engineering starts before implementation.</p>
+        <ul class="stack" aria-label="Technologies I work with">
+          <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>React</li><li>TypeScript</li><li>REST APIs</li><li>PostgreSQL</li><li>MongoDB</li><li>AWS</li><li>Kubernetes</li><li>OpenShift</li><li>Datadog</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="h-exp" style="background:#efe9df">
+    <div class="wrap rail">
+      <div class="rail-mark" aria-hidden="true"><span style="--c: var(--sky)">02</span></div>
+      <div>
+        <p class="label">Experience</p>
+        <h2 class="title" id="h-exp">7+ years. Three very different engineering environments.</h2>
+        <div class="timeline">
+          <div class="axis" aria-hidden="true"><span>2019</span><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+          <!-- Bars are drawn to scale in months from Jan 2019 (96 columns = Jan 2019 – Dec 2026). -->
+          <article class="job reveal">
+            <div class="bar" style="--c: var(--lime); grid-column: 80 / 95" aria-hidden="true"></div>
+            <div class="info"><div><h3>Sinch</h3><p class="role">Software Engineer II · Aug 2025 – now</p></div>
+              <ul><li>Full-stack apps for NG911 call routing and emergency communication.</li><li>Troubleshooting across PostgreSQL, MongoDB, Kubernetes and OpenShift with Datadog logs, metrics and traces.</li><li>Designed and documented a CI/CD approach for automated shared-library versioning and releases.</li></ul></div>
+          </article>
+          <article class="job reveal">
+            <div class="bar" style="--c: var(--sky); grid-column: 55 / 80" aria-hidden="true"></div>
+            <div class="info"><div><h3>JPMorgan Chase &amp; Co.</h3><p class="role">Software Engineer II · Jul 2023 – Aug 2025</p></div>
+              <ul><li>Developed the Authoriti API supporting the migration of 30M+ digital documents from MongoDB to PostgreSQL.</li><li>AWS, Terraform and Spinnaker for infrastructure and deployments.</li></ul></div>
+          </article>
+          <article class="job reveal">
+            <div class="bar" style="--c: var(--coral); grid-column: 6 / 55" aria-hidden="true"></div>
+            <div class="info"><div><h3>Vanguard</h3><p class="role">Application Engineer I / II · Jun 2019 – Jul 2023</p></div>
+              <ul><li>10+ Java REST APIs on AWS for platforms serving 100K+ daily users.</li><li>WCAG-aligned accessibility; Splunk, PagerDuty and Honeycomb subject-matter expert.</li></ul></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="work" aria-labelledby="h-work">
+    <div class="wrap rail">
+      <div class="rail-mark" aria-hidden="true"><span style="--c: var(--lilac)">03</span></div>
+      <div>
+        <p class="label">Selected work</p>
+        <h2 class="title" id="h-work">Some problems I’ve spent time thinking about.</h2>
+        <p>Not every useful engineering artifact is a public GitHub repo. These are examples of how I approach ambiguous work.</p>
+        <div class="cases">
+          <article class="case reveal" style="--c: var(--coral)">
+            <span class="mono">Case 01 · UX · Frontend · Accessibility</span>
+            <h3>Search isn’t always just a search bar.</h3>
+            <p>Global search, field-specific search, filters, matching behavior, empty states and accessibility, before committing to the implementation.</p>
+            <details><summary>What it covers</summary><ul><li>The six questions in section 01</li><li class="placeholder">Decisions and outcome: content needed</li></ul></details>
+            <span class="state">Detailed write-up in progress</span>
+          </article>
+          <article class="case reveal" style="--c: var(--lime)">
+            <span class="mono">Case 02 · AI · Dev experience</span>
+            <h3>Giving AI the right context without documentation chaos.</h3>
+            <p>What information belongs where so humans and AI can both trust it?</p>
+            <details><summary>What it covers</summary><ul><li>README, agent guide, issue docs and feature docs (see AI section)</li></ul></details>
+            <span class="state">Summary only</span>
+          </article>
+          <article class="case reveal" style="--c: var(--sky)">
+            <span class="mono">Case 03 · Systems · Observability</span>
+            <h3>When the answer isn’t in one layer.</h3>
+            <p>An anonymized investigation following production behavior across code, infrastructure, configuration and observability signals.</p>
+            <details><summary>What it covers</summary><ul><li>symptom → logs → service → infra → cause</li></ul></details>
+            <span class="state">Coming next</span>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark ai" id="ai" aria-labelledby="h-ai">
+    <div class="wrap ai-grid">
+      <div>
+        <p class="label">AI-assisted development</p>
+        <h2 class="title" id="h-ai">Humans and AI both need the right context.</h2>
+        <p>At Sinch I lead AI-assisted engineering initiatives using GitHub Copilot and Claude, covering UI development, repository guidance, team workflows and automation opportunities.</p>
+        <blockquote>AI output is a hypothesis until the real system verifies it.</blockquote>
+      </div>
+      <ol class="flow reveal" aria-label="Where each kind of information lives">
+        <li><strong>README</strong><span>How do I run it?</span></li>
+        <li><strong>Agent guide</strong><span>What must AI know?</span></li>
+        <li><strong>Issue docs</strong><span>Why this change?</span></li>
+        <li><strong>Feature docs</strong><span>What stays true?</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="personal" aria-labelledby="h-personal">
+    <div class="wrap rail">
+      <div class="rail-mark" aria-hidden="true"><span style="--c: var(--coral)">04</span></div>
+      <div>
+        <p class="label">Off-call</p>
+        <h2 class="title" id="h-personal">Engineering is a big part of me. It isn’t all of me.</h2>
+        <p>I cook a lot, and the habits carry over: prepare first, assemble carefully, then let it run.</p>
+        <ol class="pipeline" aria-label="Making tamales, in three photos">
+          <li class="reveal"><figure>
+            <img src="photos/tamale-assembly-close.jpg" width="1400" height="588" loading="lazy" decoding="async" alt="A tray of freshly assembled tamales in corn husks next to a skillet of red chile filling.">
+            <figcaption><span class="mono">Stage 1 · assemble</span><strong>Filling, masa and husks</strong></figcaption></figure></li>
+          <li class="reveal"><figure>
+            <img src="photos/tamales-in-steamer-pot.jpg" width="1400" height="996" loading="lazy" decoding="async" alt="Tamales standing upright in a large steamer pot.">
+            <figcaption><span class="mono">Stage 2 · steam</span><strong>Packed upright to steam</strong></figcaption></figure></li>
+          <li class="reveal"><figure>
+            <img src="photos/shell-pasta-soup-with-rolled-tacos.jpg" width="1400" height="1050" loading="lazy" decoding="async" alt="A bowl of shell-pasta soup with two crispy rolled tacos, cilantro and crumbled cheese.">
+            <figcaption><span class="mono">Stage 3 · serve</span><strong>And then, dinner</strong><br><span class="placeholder" style="display:inline-block;margin-top:.4rem">different dish: swap for a finished-tamales photo?</span></figcaption></figure></li>
+        </ol>
+        <div class="extras reveal">
+          <img src="photos/meal-prep-beef-potatoes-peppers-rice.jpg" width="1400" height="997" loading="lazy" decoding="async" alt="Rows of meal-prep containers with ground beef and potatoes, rice with corn, and peppers and onions.">
+          <ul class="chips" aria-label="Interests">
+            <li><strong>Music</strong>Violin, piano and guitar.</li>
+            <li><strong>Cooking</strong>I will absolutely tell you what I made this week.</li>
+            <li><strong>Mickey</strong>Unofficial engineering manager. Very demanding.</li>
+            <li><strong>Mentoring</strong>Helping other people find their footing.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contact" aria-labelledby="h-contact">
+    <div class="wrap">
+      <p class="label" style="color:var(--ink)">Contact</p>
+      <h2 id="h-contact">Have a problem worth understanding?</h2>
+      <p>I’m currently exploring Software Engineer II through Senior full-stack opportunities.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="mailto:betsydelacru@gmail.com">Email me</a>
+        <a class="btn" href="https://github.com/bdelacru">GitHub</a>
+        <a class="btn" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">Résumé</a>
+        <span class="placeholder">LinkedIn: link needed</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>Designed &amp; built by Betsy De La Cruz.</span><span>Chicago · 2026</span></div>
+</footer>
+
+<script>
+(() => {
+  // Layer explorer content: every example comes from the résumé or the current site.
+  const layers = [
+    ['User', 'Starting from what people need', ['<span class="where">Sinch:</span> partner with business stakeholders to translate user needs into UI functionality.', '<span class="where">Approach:</span> “What are users actually trying to find?” before building search.']],
+    ['Experience', 'UX research and accessibility', ['<span class="where">Sinch:</span> evaluate search and filtering experiences, propose UX alternatives, wireframes and mockups.', '<span class="where">Vanguard:</span> WCAG-aligned improvements, including keyboard navigation and screen-reader compatibility.']],
+    ['Frontend', 'React and TypeScript UIs', ['<span class="where">Sinch:</span> full-stack applications with React for NG911 call routing.', '<span class="where">Sinch:</span> review Playwright UI tests and identify testing gaps.']],
+    ['API', 'REST APIs in Java and Kotlin', ['<span class="where">JPMorgan Chase:</span> developed the Authoriti API supporting a 30M+ document migration.', '<span class="where">Vanguard:</span> engineered 10+ Java REST APIs on AWS for platforms serving 100K+ daily users.']],
+    ['Services', 'Spring Boot backends', ['<span class="where">Sinch:</span> Kotlin/Java and Spring Boot services for emergency communication systems.', '<span class="where">JPMorgan Chase:</span> backend services for enterprise digital document systems.']],
+    ['Data', 'PostgreSQL and MongoDB', ['<span class="where">JPMorgan Chase:</span> migration of 30M+ digital documents from MongoDB to PostgreSQL.', '<span class="where">Sinch:</span> troubleshooting across PostgreSQL and MongoDB.']],
+    ['Infrastructure', 'Cloud, containers and delivery', ['<span class="where">Sinch:</span> Kubernetes and OpenShift; designed a CI/CD approach for shared-library versioning and releases.', '<span class="where">JPMorgan Chase:</span> AWS, Terraform and Spinnaker.']],
+    ['Observability', 'Finding out what production is doing', ['<span class="where">Sinch:</span> Datadog logs, metrics and traces for production and environment-specific issues.', '<span class="where">Vanguard:</span> subject-matter expert for Splunk, PagerDuty and Honeycomb; automated Splunk reporting.']]
+  ];
+  const list = document.querySelector('.tablist');
+  const panel = document.getElementById('layer-panel');
+  const tabs = layers.map(([name], i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.setAttribute("role", "tab"); b.id = 'tab-' + i; b.textContent = name;
+    b.setAttribute('aria-controls', 'layer-panel');
+    b.addEventListener('click', () => select(i));
+    list.append(b);
+    return b;
+  });
+  function select(i, focus) {
+    tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
+    panel.setAttribute('aria-labelledby', 'tab-' + i);
+    const [name, title, items] = layers[i];
+    panel.innerHTML = '<h3>' + title + '</h3><ul>' + items.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+    if (focus) tabs[i].focus();
+  }
+  // Arrow keys move between layers (WAI-ARIA tabs pattern)
+  list.addEventListener('keydown', e => {
+    const i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    const next = { ArrowDown: i + 1, ArrowRight: i + 1, ArrowUp: i - 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+    if (next === undefined) return;
+    e.preventDefault();
+    select((next + tabs.length) % tabs.length, true);
+  });
+  select(3);
+
+  // Progressive reveal
+  const els = document.querySelectorAll('.reveal');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || location.search.includes('static') || !('IntersectionObserver' in window);
+  if (still) { els.forEach(el => el.classList.add('in')); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>

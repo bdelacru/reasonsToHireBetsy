@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2 Homepage Concepts (prototypes)</title>
+<style>
+:root { --bg: #f6f4f0; --ink: #1d1b26; --soft: #55516a; --a: #d7402b; --b: #2a46c7; --c: #191431; --line: #d8d2c6; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1.0625rem/1.6 system-ui, 'Segoe UI', sans-serif; }
+main { width: min(1100px, 100% - 2rem); margin: 0 auto; padding: 3rem 0 4rem; }
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.1; margin: 0 0 .75rem; }
+.note { background: #fff; border-left: 4px solid var(--ink); padding: .85rem 1rem; max-width: 70ch; }
+ul.concepts { list-style: none; padding: 0; margin: 2.5rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.concepts li { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 1.4rem; border-top: 8px solid var(--c1); display: flex; flex-direction: column; gap: .5rem; }
+.concepts h2 { margin: 0; font-size: 1.35rem; }
+.concepts p { margin: 0; color: var(--soft); }
+.concepts a { margin-top: auto; padding-top: .75rem; font-weight: 700; color: var(--ink); }
+a:focus-visible { outline: 3px solid var(--b); outline-offset: 3px; border-radius: 3px; }
+table { border-collapse: collapse; width: 100%; background: #fff; font-size: .9375rem; }
+th, td { text-align: left; padding: .6rem .8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th[scope="row"] { width: 18%; }
+.scroll { overflow-x: auto; }
+code { background: #fff; padding: .1rem .3rem; border-radius: 3px; }
+@media (max-width: 800px) { ul.concepts { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>ReasonsToHireBetsy v2: homepage concepts</h1>
+  <p class="note"><strong>Exploratory prototypes.</strong> None of these is an approved direction, and their colors, fonts, layouts and interactions aren’t production standards. All three follow the approved progressive personality reveal: engineering first, photography further down. Write-up: <code>docs/research/v2-homepage-concept-comparison.md</code>.</p>
+
+  <ul class="concepts">
+    <li style="--c1: var(--a)">
+      <h2>A · Colorful Editorial</h2>
+      <p>Magazine-style: large serif headlines, a contents strip, strong color blocks. Photos enter as a full-bleed interlude after Experience.</p>
+      <a href="concept-a-editorial.html">Open Concept A</a>
+    </li>
+    <li style="--c1: var(--b)">
+      <h2>B · Creative Scrapbook</h2>
+      <p>Paper, tape, stickers and notebook pages. Professional content stays on straight sheets; playful layering happens around it. Photos arrive as flippable prints.</p>
+      <a href="concept-b-scrapbook.html">Open Concept B</a>
+    </li>
+    <li style="--c1: var(--c)">
+      <h2>C · Interactive Engineering Studio</h2>
+      <p>A dark hero with an interactive system-layer explorer, then light sections on a signal rail. Photos appear as a three-stage “pipeline”.</p>
+      <a href="concept-c-studio.html">Open Concept C</a>
+    </li>
+  </ul>
+
+  <h2>At a glance</h2>
+  <div class="scroll" role="region" aria-label="Comparison table" tabindex="0">
+    <table>
+      <thead><tr><th scope="col"></th><th scope="col">A · Editorial</th><th scope="col">B · Scrapbook</th><th scope="col">C · Studio</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">First impression</th><td>Typography and color blocks</td><td>Warm paper and handmade details</td><td>Dark, technical, interactive</td></tr>
+        <tr><th scope="row">First photo</th><td>After Experience (interlude)</td><td>Off-the-clock section</td><td>Off-call section</td></tr>
+        <tr><th scope="row">Main interaction</th><td>Contents strip (navigation)</td><td>Flip a print; 8-Ball Easter egg</td><td>System-layer explorer (tabs)</td></tr>
+        <tr><th scope="row">Photos used</th><td>3</td><td>5</td><td>4</td></tr>
+        <tr><th scope="row">Fonts (Google Fonts)</th><td>Fraunces, Instrument Sans</td><td>Bricolage Grotesque, Atkinson Hyperlegible, Caveat</td><td>Familjen Grotesk, IBM Plex Sans, IBM Plex Mono</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Tip: add <code>?static</code> to a concept’s URL to show everything at once (no scroll reveal), which helps with full-page screenshots.</p>
+</main>
+</body>
+</html>

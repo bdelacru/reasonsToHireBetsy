@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept B · Creative Scrapbook · Betsy De La Cruz (prototype)</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Caveat:wght@500..700&display=swap" rel="stylesheet">
+<style>
+/* EXPLORATORY PROTOTYPE. Colors, fonts and layout are not approved production choices. */
+:root {
+  --page: #fffdf8;
+  --dot: #e9e1d3;
+  --ink: #23213a;
+  --ink-soft: #4b4862;
+  --cobalt: #2a46c7;     /* links, buttons, focus */
+  --coral: #ff6b4a;      /* decoration only */
+  --coral-text: #b8361a;
+  --mustard: #ffc93c;
+  --mint: #c4ecd9;
+  --pink: #ffd6dc;
+  --sky: #d5e4ff;
+  --display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --hand: 'Caveat', 'Segoe Print', cursive;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; color: var(--ink); font: 400 1.0625rem/1.6 var(--body);
+  background-color: var(--page);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--cobalt); text-underline-offset: .18em; }
+:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; border-radius: 4px; }
+.skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 10; background: var(--ink); color: #fff; padding: .6rem 1rem; font-weight: 700; }
+.skip-link:focus { top: 1rem; }
+.proto-bar { background: var(--ink); color: #fff; font-size: .8125rem; padding: .45rem clamp(1rem, 4vw, 3rem); display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap; }
+.proto-bar a { color: var(--mustard); }
+.proto-bar :focus-visible { outline-color: var(--mustard); }
+
+.wrap { width: min(1180px, 100% - 2 * clamp(1rem, 4vw, 3rem)); margin-inline: auto; }
+
+/* Header */
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-block: 1.25rem; }
+.brand { font: 800 1.35rem/1 var(--display); color: var(--ink); text-decoration: none; position: relative; }
+.brand::after { content: ""; position: absolute; left: -4px; right: -6px; bottom: -2px; height: .5em; background: var(--mustard); z-index: -1; transform: rotate(-1.5deg); border-radius: 3px; }
+.site-header ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.site-header nav a { display: inline-block; padding: .45rem .9rem; border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 700; background: #fff; border: 2px solid var(--ink); min-height: 44px; }
+.site-header nav a:hover { background: var(--sky); }
+.site-header nav a.resume { background: var(--ink); color: #fff; }
+
+/* Shared paper surfaces. Professional content sits on straight, unrotated paper. */
+.sheet { background: #fff; border: 2px solid var(--ink); border-radius: 6px; box-shadow: 6px 6px 0 var(--ink); }
+.tape { position: absolute; width: 110px; height: 28px; background: rgba(255, 201, 60, .75); top: -14px; left: 50%; transform: translateX(-50%) rotate(-3deg); }
+.tape.mint { background: rgba(196, 236, 217, .9); }
+.tape.pink { background: rgba(255, 182, 193, .8); }
+.hand { font: 600 1.45rem/1.1 var(--hand); color: var(--coral-text); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem); align-items: start; }
+.intro { padding: clamp(1.5rem, 4vw, 3rem); position: relative; }
+.intro .hello { margin: 0 0 .5rem; font-weight: 700; color: var(--ink-soft); }
+.intro h1 { font: 800 clamp(2.6rem, 6.4vw, 5.2rem)/.95 var(--display); letter-spacing: -.03em; margin: 0; }
+.intro h1 .role { display: block; font-size: .5em; letter-spacing: -.01em; margin-top: .6rem; color: var(--cobalt); }
+.intro .line { font-size: clamp(1.15rem, 1.8vw, 1.35rem); margin: 1.5rem 0 0; max-width: 40ch; }
+.intro .line mark { background: linear-gradient(transparent 55%, var(--pink) 55%); color: inherit; padding-inline: .1em; }
+.intro p { max-width: 58ch; }
+.actions { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 1.75rem; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.3rem; border: 2px solid var(--ink); border-radius: 10px; font-weight: 700; text-decoration: none; color: var(--ink); background: #fff; box-shadow: 4px 4px 0 var(--ink); min-height: 48px; transition: transform .15s, box-shadow .15s; }
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.btn-primary { background: var(--cobalt); color: #fff; border-color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:hover { transform: none; } }
+
+.notes { display: grid; gap: 1.5rem; padding-top: .5rem; }
+.card { position: relative; padding: 1.4rem 1.4rem 1.2rem; border: 2px solid var(--ink); border-radius: 4px; }
+.card h2 { font: 800 1.05rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 .75rem; }
+.facts { background: #fff; transform: rotate(1.2deg); }
+.facts dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .45rem 1rem; }
+.facts dt { font-weight: 700; }
+.facts dd { margin: 0; }
+.now { background: var(--mint); transform: rotate(-1.4deg); margin-left: 1.5rem; }
+.now p { margin: 0; }
+
+/* Section framing */
+.section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.section-label { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.section-label h2 { font: 800 clamp(2rem, 4.2vw, 3.2rem)/1.02 var(--display); letter-spacing: -.02em; margin: 0; max-width: 22ch; }
+.sticker { display: inline-block; font: 800 .8125rem/1 var(--display); text-transform: uppercase; letter-spacing: .08em; padding: .45rem .7rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--mustard); transform: rotate(-4deg); }
+
+/* Strengths: notes of different sizes and colors */
+.strengths { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1.75rem; align-items: start; }
+.strengths .card:nth-child(1) { background: var(--pink); }
+.strengths .card:nth-child(2) { background: #fff; margin-top: 2rem; }
+.strengths .card:nth-child(3) { background: var(--sky); }
+.strengths h3 { font: 800 1.35rem/1.15 var(--display); margin: .25rem 0 .5rem; }
+.strengths p { margin: 0; }
+.tools { margin-top: 2.25rem; display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; }
+.tools li { background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: .25rem .65rem; font-weight: 700; font-size: .9375rem; }
+
+/* Experience: a stitched notebook page */
+.notebook { padding: clamp(1.5rem, 4vw, 2.75rem); position: relative; background: #fff linear-gradient(90deg, transparent 54px, #ffb3a7 54px, #ffb3a7 56px, transparent 56px); }
+.jobs { list-style: none; margin: 0; padding: 0 0 0 48px; display: grid; gap: 2rem; }
+.jobs > li { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 1.5rem; }
+.stamp { font: 800 .9rem/1.2 var(--display); text-transform: uppercase; letter-spacing: .04em; border: 2.5px solid var(--cobalt); color: var(--cobalt); border-radius: 6px; padding: .5rem .6rem; align-self: start; text-align: center; transform: rotate(-3deg); }
+.jobs h3 { font: 800 1.6rem/1.1 var(--display); margin: 0; }
+.jobs .title { margin: .2rem 0 .5rem; font-weight: 700; color: var(--ink-soft); }
+.jobs ul { margin: 0; padding-left: 1.1rem; }
+
+/* Work: folders with tabs */
+.folders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.25rem 1.75rem; align-items: start; padding-top: 1.75rem; }
+.folder { position: relative; padding: 1.5rem; border: 2px solid var(--ink); border-radius: 0 8px 8px 8px; }
+.folder .tab { position: absolute; top: -32px; left: -2px; padding: .35rem .9rem; border: 2px solid var(--ink); border-bottom: 0; border-radius: 8px 8px 0 0; font: 800 .8125rem/1.4 var(--display); text-transform: uppercase; letter-spacing: .06em; background: inherit; }
+.folder:nth-child(1) { background: var(--mustard); grid-column: span 2; }
+.folder:nth-child(2) { background: var(--mint); }
+.folder:nth-child(3) { background: var(--sky); grid-column: span 3; }
+.folder h3 { font: 800 1.45rem/1.15 var(--display); margin: 0 0 .5rem; }
+.folder p { margin: 0 0 .75rem; max-width: 62ch; }
+.folder .tags { font-size: .875rem; font-weight: 700; }
+.folder .state { display: inline-block; margin-top: .25rem; font-weight: 700; background: #fff; border: 1.5px solid var(--ink); border-radius: 999px; padding: .15rem .65rem; font-size: .875rem; }
+.ticket { display: flex; gap: .5rem; flex-wrap: wrap; margin: .75rem 0; padding: 0; list-style: none; }
+.ticket li { background: #fff; border: 1.5px dashed var(--ink); border-radius: 4px; padding: .2rem .55rem; font-size: .9375rem; }
+
+/* AI: annotated documentation map */
+.ai { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+.ai .sheet { padding: clamp(1.5rem, 3vw, 2.25rem); position: relative; }
+.ai blockquote { margin: 0 0 1rem; font: 800 clamp(1.45rem, 2.6vw, 2rem)/1.15 var(--display); }
+.docs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; list-style: none; padding: 0; margin: 0; }
+.docs li { padding: 1rem; border: 2px solid var(--ink); border-radius: 4px; position: relative; }
+.docs li:nth-child(1) { background: var(--pink); transform: rotate(-1.5deg); }
+.docs li:nth-child(2) { background: var(--mustard); transform: rotate(1deg); }
+.docs li:nth-child(3) { background: var(--mint); transform: rotate(.8deg); }
+.docs li:nth-child(4) { background: var(--sky); transform: rotate(-1deg); }
+.docs strong { display: block; font: 800 1.1rem var(--display); }
+
+/* Personal: prints that can flip to show a note */
+.personal-intro { max-width: 60ch; }
+.prints { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2rem 1.5rem; margin-top: 2.5rem; align-items: start; }
+.print { position: relative; grid-column: span 4; margin: 0; }
+.print:nth-child(1) { grid-column: 1 / span 5; transform: rotate(-2deg); }
+.print:nth-child(2) { grid-column: 6 / span 4; transform: rotate(1.5deg); margin-top: 2.5rem; }
+.print:nth-child(3) { grid-column: 10 / span 3; transform: rotate(-1deg); }
+.print:nth-child(4) { grid-column: 2 / span 4; transform: rotate(1deg); }
+.print:nth-child(5) { grid-column: 7 / span 5; transform: rotate(-1.5deg); }
+.print.frame { background: #fff; padding: .7rem .7rem 0; border: 1px solid #d8d0c2; box-shadow: 0 10px 24px rgba(35, 33, 58, .16); }
+.print img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+.print.square img { aspect-ratio: 1; }
+.print .caption { font: 600 1.35rem/1.2 var(--hand); color: var(--ink); padding: .55rem .2rem .7rem; display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+.flip { font: 700 .8125rem/1 var(--body); border: 1.5px solid var(--ink); background: var(--page); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; min-height: 32px; color: var(--ink); }
+.flip:hover { background: var(--mustard); }
+.back { position: absolute; inset: .7rem .7rem 3.4rem; background: var(--mustard); display: grid; place-items: center; padding: 1rem; text-align: center; font: 600 1.5rem/1.2 var(--hand); }
+.back[hidden] { display: none; }
+.interests { margin-top: 3rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; list-style: none; padding: 0; }
+.interests li { background: #fff; border: 2px solid var(--ink); border-radius: 4px; padding: 1rem; }
+.interests strong { display: block; font: 800 1.15rem var(--display); }
+
+/* Contact */
+.contact { padding: clamp(2rem, 5vw, 3.5rem); text-align: left; background: var(--cobalt); color: #fff; position: relative; }
+.contact h2 { font: 800 clamp(2rem, 5vw, 3.6rem)/1 var(--display); margin: 0 0 .75rem; max-width: 18ch; }
+.contact a.btn { background: #fff; color: var(--ink); }
+.contact a.btn-primary { background: var(--mustard); }
+.contact :focus-visible { outline-color: #fff; }
+.placeholder { font-size: .8125rem; font-weight: 700; background: #fff; color: var(--coral-text); border: 1.5px dashed var(--coral-text); padding: .15rem .5rem; border-radius: 4px; }
+
+footer { padding-block: 2.5rem 3rem; }
+footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: center; }
+.eight { display: inline-flex; align-items: center; gap: .6rem; background: none; border: 0; font: 600 1.35rem var(--hand); color: var(--ink); cursor: pointer; padding: .25rem; min-height: 44px; }
+.eight .ball { width: 36px; height: 36px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #555 0, #111 60%); display: grid; place-items: center; }
+.eight .ball span { width: 16px; height: 16px; border-radius: 50%; background: #fff; color: #111; font: 800 .7rem/16px var(--body); text-align: center; }
+dialog { border: 2px solid var(--ink); border-radius: 8px; box-shadow: 8px 8px 0 var(--ink); padding: 1.75rem; max-width: min(460px, 92vw); background: #fff; color: var(--ink); }
+dialog::backdrop { background: rgba(35, 33, 58, .45); }
+dialog h2 { font: 800 1.5rem var(--display); margin: 0 0 .25rem; }
+dialog .answer { font: 600 1.6rem var(--hand); color: var(--coral-text); margin: .25rem 0 1rem; }
+dialog h3 { font: 800 1.2rem var(--display); margin: 0 0 .35rem; }
+dialog .row { display: flex; gap: .75rem; margin-top: 1.25rem; flex-wrap: wrap; }
+dialog button { font: 700 1rem var(--body); }
+
+/* Progressive reveal */
+.reveal { transition: opacity .6s ease, translate .6s ease; }
+.js .reveal:not(.in) { opacity: 0; translate: 0 26px; }
+@media (prefers-reduced-motion: reduce) { .reveal { transition: none; } .js .reveal:not(.in) { opacity: 1; translate: none; } }
+
+@media (max-width: 960px) {
+  .hero, .ai { grid-template-columns: 1fr; }
+  .now { margin-left: 0; }
+  .strengths { grid-template-columns: 1fr 1fr; }
+  .strengths .card:nth-child(2) { margin-top: 0; }
+  .folders { grid-template-columns: 1fr 1fr; }
+  .folder:nth-child(1), .folder:nth-child(3) { grid-column: 1 / -1; }
+  .print:nth-child(n) { grid-column: span 6; margin-top: 0; }
+  .interests { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .strengths, .folders, .docs, .interests { grid-template-columns: 1fr; }
+  .folder:nth-child(n) { grid-column: 1 / -1; }
+  .jobs { padding-left: 40px; }
+  .notebook { background: #fff linear-gradient(90deg, transparent 30px, #ffb3a7 30px, #ffb3a7 32px, transparent 32px); }
+  .jobs { padding-left: 24px; }
+  .jobs > li { grid-template-columns: 1fr; gap: .6rem; }
+  .stamp { justify-self: start; }
+  .print:nth-child(n) { grid-column: 1 / -1; }
+  .facts dl { grid-template-columns: 1fr; gap: 0; }
+  .facts dd { margin-bottom: .45rem; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="proto-bar" role="note"><span><strong>Prototype</strong> · Concept B of 3: Creative Scrapbook · exploratory, not an approved design</span><a href="index.html">All concepts</a></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">Betsy De La Cruz</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#strengths">Strengths</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a class="resume" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">Résumé</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap hero" id="top">
+    <div class="sheet intro">
+      <p class="hello">Hi, I’m</p>
+      <h1>Betsy De La Cruz <span class="role">Full-stack software engineer</span></h1>
+      <p class="line">I think <mark>beyond the code in front of me</mark>.</p>
+      <p>7+ years building across the stack, from the user experience to the backend, infrastructure and production behavior. I like understanding the entire problem before deciding what the right solution should be.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">View résumé</a>
+        <a class="btn" href="mailto:betsydelacru@gmail.com">Email me</a>
+      </div>
+    </div>
+    <div class="notes">
+      <aside class="card facts" aria-labelledby="facts-h">
+        <span class="tape" aria-hidden="true"></span>
+        <h2 id="facts-h">Quick facts</h2>
+        <dl>
+          <dt>Based in</dt><dd>Chicago, IL</dd>
+          <dt>Stack</dt><dd>Kotlin/Java, Spring Boot, React, TypeScript</dd>
+          <dt>Studied</dt><dd>B.S. Computer Science, Villanova</dd>
+          <dt>Open to</dt><dd>Software Engineer II through Senior full-stack roles</dd>
+        </dl>
+      </aside>
+      <aside class="card now" aria-labelledby="now-h">
+        <span class="tape pink" aria-hidden="true"></span>
+        <h2 id="now-h">Right now</h2>
+        <p>Software Engineer II at <strong>Sinch</strong>, building full-stack apps for Next Generation 911 call routing, and leading AI-assisted engineering initiatives.</p>
+      </aside>
+    </div>
+  </div>
+
+  <section class="section" id="strengths" aria-labelledby="h-strengths">
+    <div class="wrap">
+      <div class="section-label"><span class="sticker" aria-hidden="true">How I work</span><h2 id="h-strengths">Good engineering starts before implementation.</h2></div>
+      <div class="strengths">
+        <article class="card reveal"><span class="tape" aria-hidden="true"></span><h3>I zoom out before I zoom in.</h3><p>Before I start changing code, I want to understand the user, the system around the change, and how we will know the solution is actually working.</p></article>
+        <article class="card reveal"><span class="tape mint" aria-hidden="true"></span><h3>I follow the problem across layers.</h3><p>Sometimes the answer is in the UI. Sometimes it is an API, a database query, deployment configuration, or the logs.</p></article>
+        <article class="card reveal"><span class="tape pink" aria-hidden="true"></span><h3>I ask one more question.</h3><p>A ticket can say “add search,” but the useful questions are what people need to find and what happens when the happy path is not enough.</p></article>
+      </div>
+      <ul class="tools" aria-label="Technologies I work with">
+        <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>React</li><li>TypeScript</li><li>REST APIs</li><li>PostgreSQL</li><li>MongoDB</li><li>AWS</li><li>Kubernetes</li><li>OpenShift</li><li>Datadog</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="h-exp">
+    <div class="wrap">
+      <div class="section-label"><span class="sticker" aria-hidden="true" style="background:var(--mint)">Experience</span><h2 id="h-exp">Three very different engineering environments.</h2></div>
+      <div class="sheet notebook reveal">
+        <ol class="jobs" reversed>
+          <li>
+            <span class="stamp">Aug 2025<br>– now</span>
+            <div><h3>Sinch</h3><p class="title">Software Engineer II · Next Generation 911</p>
+              <ul><li>Full-stack applications for NG911 call routing and emergency communication.</li><li>Search and filtering UX research, wireframes and mockups with stakeholders.</li><li>Leads AI-assisted engineering with GitHub Copilot and Claude.</li></ul></div>
+          </li>
+          <li>
+            <span class="stamp">Jul 2023<br>– Aug 2025</span>
+            <div><h3>JPMorgan Chase &amp; Co.</h3><p class="title">Software Engineer II · Digital Document Services</p>
+              <ul><li>Developed the Authoriti API supporting the migration of 30M+ digital documents from MongoDB to PostgreSQL.</li><li>Temporary Scrum Master across engineering and business stakeholders.</li></ul></div>
+          </li>
+          <li>
+            <span class="stamp">Jun 2019<br>– Jul 2023</span>
+            <div><h3>Vanguard</h3><p class="title">Application Engineer I / II · Digital Advisor</p>
+              <ul><li>10+ Java REST APIs on AWS for platforms serving 100K+ daily users.</li><li>WCAG-aligned accessibility improvements for customer-facing UIs.</li></ul></div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="work" aria-labelledby="h-work">
+    <div class="wrap">
+      <div class="section-label"><span class="sticker" aria-hidden="true" style="background:var(--sky)">Selected work</span><h2 id="h-work">Some problems I’ve spent time thinking about.</h2></div>
+      <div class="folders">
+        <article class="folder reveal">
+          <span class="tab">Case study 01</span>
+          <h3>Search isn’t always just a search bar.</h3>
+          <p>A research-driven look at global search, field-specific search, filters, matching behavior, empty states and accessibility, before committing to the implementation.</p>
+          <p class="tags">UX · Frontend · Accessibility</p>
+          <p style="margin-bottom:.25rem"><strong>The ticket says:</strong> “Add search.” The questions I ask:</p>
+          <ul class="ticket"><li>What are users trying to find?</li><li>Which fields?</li><li>Exact or partial?</li><li>Filters instead?</li><li>Keyboard-only?</li><li>No results?</li></ul>
+          <span class="state">Detailed write-up in progress</span>
+        </article>
+        <article class="folder reveal">
+          <span class="tab">Case study 02</span>
+          <h3>Giving AI the right context without documentation chaos.</h3>
+          <p>What information belongs where so humans and AI can both trust it?</p>
+          <p class="tags">AI · Dev experience · Documentation</p>
+          <span class="state">Summary only</span>
+        </article>
+        <article class="folder reveal">
+          <span class="tab">Case study 03</span>
+          <h3>When the answer isn’t in one layer.</h3>
+          <p>An anonymized engineering investigation following production behavior across application code, infrastructure, configuration and observability signals.</p>
+          <p class="tags">Systems · Debugging · Observability</p>
+          <span class="state">Coming next</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ai" aria-labelledby="h-ai">
+    <div class="wrap ai">
+      <div class="sheet reveal">
+        <span class="tape mint" aria-hidden="true"></span>
+        <p class="sticker" style="transform:none;background:var(--pink)">AI-assisted development</p>
+        <h2 id="h-ai" style="font:800 clamp(1.8rem,3.4vw,2.6rem)/1.05 var(--display);margin:.75rem 0 1rem">What must AI know, and where should it live?</h2>
+        <blockquote>AI output is a hypothesis until the real system verifies it.</blockquote>
+        <p>I lead AI-assisted engineering initiatives at Sinch with GitHub Copilot and Claude, covering UI development, repository guidance and team workflows. This site’s redesign is documented the same way.</p>
+      </div>
+      <ul class="docs reveal" aria-label="Where each kind of information lives">
+        <li><strong>README</strong>How do I run it?</li>
+        <li><strong>Agent guide</strong>What must AI know?</li>
+        <li><strong>Issue docs</strong>Why this change?</li>
+        <li><strong>Feature docs</strong>What stays true?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="personal" aria-labelledby="h-personal">
+    <div class="wrap">
+      <div class="section-label"><span class="sticker" aria-hidden="true" style="background:var(--pink)">Off the clock</span><h2 id="h-personal">Engineering is a big part of me. It isn’t all of me.</h2></div>
+      <p class="personal-intro">I cook a lot, and I will absolutely tell you what I made this week. These are a few of my own photos. Flip one over for a note.</p>
+      <div class="prints">
+        <figure class="print frame reveal">
+            <img src="photos/tamale-assembly-close.jpg" width="1400" height="588" loading="lazy" decoding="async" alt="A tray of freshly assembled tamales in corn husks, with a skillet of red chile filling and a bowl of husks beside it.">
+            <div class="back" id="back-1" hidden>Assembled by the trayful, before steaming.</div>
+            <figcaption class="caption">Tamales, step 1 <button class="flip" type="button" aria-expanded="false" aria-controls="back-1">Flip</button></figcaption>
+        </figure>
+        <figure class="print frame reveal">
+            <img src="photos/tamales-in-steamer-pot.jpg" width="1400" height="996" loading="lazy" decoding="async" alt="Tamales standing upright in a large steamer pot.">
+            <div class="back" id="back-2" hidden>Then standing up in the steamer.</div>
+            <figcaption class="caption">Tamales, step 2 <button class="flip" type="button" aria-expanded="false" aria-controls="back-2">Flip</button></figcaption>
+        </figure>
+        <figure class="print frame square reveal">
+            <img src="photos/heart-red-velvet-cake-xoxo.jpg" width="1346" height="1400" loading="lazy" decoding="async" alt="A heart-shaped cake with white frosting, coral piped borders and XOXO in red.">
+            <div class="back" id="back-3" hidden>Red velvet with piped frosting.</div>
+            <figcaption class="caption">XOXO <button class="flip" type="button" aria-expanded="false" aria-controls="back-3">Flip</button></figcaption>
+        </figure>
+        <figure class="print frame reveal">
+            <img src="photos/breaded-cauliflower-bites-marinara.jpg" width="1400" height="1250" loading="lazy" decoding="async" alt="Breaded baked bites arranged in a ring around a cup of marinara sauce.">
+            <div class="back" id="back-4" hidden><span class="placeholder">Note needed: confirm dish</span></div>
+            <figcaption class="caption">Dip in the middle <button class="flip" type="button" aria-expanded="false" aria-controls="back-4">Flip</button></figcaption>
+        </figure>
+        <figure class="print frame reveal">
+            <img src="photos/meal-prep-beef-potatoes-peppers-rice.jpg" width="1400" height="997" loading="lazy" decoding="async" alt="Rows of meal-prep containers with ground beef and potatoes, seasoned rice with corn, and sautéed peppers and onions.">
+            <div class="back" id="back-5" hidden>Meal prep: one plan, many portions.</div>
+            <figcaption class="caption">Meal prep <button class="flip" type="button" aria-expanded="false" aria-controls="back-5">Flip</button></figcaption>
+        </figure>
+      </div>
+      <ul class="interests" aria-label="Interests">
+        <li><strong>Music</strong>Violin, piano and guitar.</li>
+        <li><strong>Cooking</strong>Proof is above.</li>
+        <li><strong>Mickey</strong>Unofficial engineering manager. Very demanding.</li>
+        <li><strong>Mentoring</strong>Helping other people find their footing.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="h-contact">
+    <div class="wrap">
+      <div class="sheet contact reveal">
+        <h2 id="h-contact">Have a problem worth understanding?</h2>
+        <p>I’m currently exploring my next software engineering opportunity.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="mailto:betsydelacru@gmail.com">Email me</a>
+          <a class="btn" href="https://github.com/bdelacru">GitHub</a>
+          <a class="btn" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">Résumé</a>
+          <span class="placeholder">LinkedIn: link needed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Designed &amp; built by Betsy De La Cruz · Chicago · 2026</span>
+    <button class="eight" type="button" id="open-eight"><span class="ball" aria-hidden="true"><span>8</span></span>Still need a reason? Ask the 8-Ball</button>
+  </div>
+</footer>
+
+<dialog id="eight-dialog" aria-labelledby="eight-h">
+  <h2 id="eight-h">Is Betsy your next great hire?</h2>
+  <p class="answer" id="eight-answer"></p>
+  <div aria-live="polite" id="eight-reason"></div>
+  <div class="row">
+    <button class="btn btn-primary" type="button" id="shake">Shake again</button>
+    <button class="btn" type="button" id="close-eight">Close</button>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  // Progressive reveal
+  const els = document.querySelectorAll('.reveal');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || location.search.includes('static') || !('IntersectionObserver' in window);
+  if (still) els.forEach(el => el.classList.add('in'));
+  else {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -8% 0px' });
+    els.forEach(el => io.observe(el));
+  }
+
+  // Flip a print to show its note (a toggle button, not a hover effect)
+  document.querySelectorAll('.flip').forEach(btn => btn.addEventListener('click', () => {
+    const back = document.getElementById(btn.getAttribute('aria-controls'));
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    btn.textContent = open ? 'Flip' : 'Flip back';
+    back.hidden = open;
+  }));
+
+  // 8-Ball Easter egg, using the existing site's fallback reasons (no backend call)
+  const reasons = [
+    ['I zoom out before I zoom in.', 'Before I start changing code, I want to understand the user, the system around the change, and how we will know the solution is actually working.'],
+    ['I follow the problem across layers.', 'I care more about finding the real cause than protecting a favorite layer.'],
+    ['I ask one more question.', 'A ticket can say “add search,” but the useful questions are what people need to find and how they expect it to behave.'],
+    ['I bring Betsy energy.', 'I care deeply about the work, but I do not believe being serious about engineering requires taking yourself seriously all the time.']
+  ];
+  const answers = ['Without a doubt.', 'Absolutely yes.', 'Most definitely.', 'Signs point to yes.', 'The universe agrees.', 'Heck yeah.'];
+  const dlg = document.getElementById('eight-dialog');
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const shake = () => {
+    const [title, text] = pick(reasons);
+    document.getElementById('eight-answer').textContent = '“' + pick(answers) + '”';
+    const box = document.getElementById('eight-reason');
+    box.innerHTML = '';
+    const h = document.createElement('h3'); h.textContent = title;
+    const p = document.createElement('p'); p.textContent = text;
+    box.append(h, p);
+  };
+  document.getElementById('open-eight').addEventListener('click', () => { shake(); dlg.showModal(); });
+  document.getElementById('shake').addEventListener('click', shake);
+  document.getElementById('close-eight').addEventListener('click', () => dlg.close());
+})();
+</script>
+</body>
+</html>

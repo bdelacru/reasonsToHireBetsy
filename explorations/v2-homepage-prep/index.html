@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prep Table Homepage (prototype)</title>
+<!--
+  EXPLORATORY PROTOTYPE, not an approved design and not production code.
+  Hero photo: Betsy's original originals/cooking_prep.jpg, resized only (run make-photos.ps1 first).
+  Fonts and colors here are exploration choices, not decisions (DESIGN.md section I).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Figtree:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="photos/cooking-prep-1200.jpg"
+      imagesrcset="photos/cooking-prep-800.jpg 800w, photos/cooking-prep-1200.jpg 1200w, photos/cooking-prep-1740.jpg 1740w"
+      imagesizes="(min-width: 900px) and (min-aspect-ratio: 1/1) 115vw, 165vw">
+<style>
+:root {
+  --bg: #15120f;          /* warm near-black, close to the tabletop */
+  --ink: #fbf7f0;
+  --muted: #ddd4c6;
+  --accent: #f4c24f;      /* butter yellow */
+  --accent-ink: #1d1608;
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Figtree', system-ui, 'Segoe UI', sans-serif;
+  --hand: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
+  --gutter: clamp(1rem, 5vw, 5.5rem);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1.0625rem/1.6 var(--sans); }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+.skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 20; background: var(--accent); color: var(--accent-ink); padding: .6rem 1rem; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.skip-link:focus { top: 1rem; }
+
+/* ---------- Header and navigation ---------- */
+.site-header { position: absolute; inset: 0 0 auto; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem var(--gutter); }
+.wordmark { font: 600 clamp(1.7rem, 1.2rem + 1.4vw, 2.35rem)/1 var(--hand); text-decoration: none; padding: .2rem 0; }
+.nav-list { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: clamp(.25rem, 1.2vw, 1.25rem); }
+.nav-list a { display: inline-block; padding: .55rem .6rem; font-weight: 500; text-decoration: none; border-radius: 6px; }
+.nav-list a:hover { text-decoration: underline; text-underline-offset: .3em; }
+.nav-list .resume a, .button-primary { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.nav-list .resume a { padding: .6rem 1.35rem; border-radius: 999px; margin-left: .35rem; }
+.nav-list .resume a:hover, .button-primary:hover { background: #ffd877; text-decoration: none; }
+.menu-button { display: none; }
+
+@media (max-width: 899px) {
+  .site-header { flex-wrap: wrap; padding-top: 1rem; }
+  .js .menu-button { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .4rem 1rem; font: 600 1rem var(--sans); color: var(--ink); background: rgba(21, 18, 15, .7); border: 1.5px solid rgba(251, 247, 240, .75); border-radius: 999px; cursor: pointer; }
+  .menu-button svg { width: 1.1rem; height: 1.1rem; }
+  /* Without JavaScript the links simply wrap; with it they sit behind the Menu button. */
+  .nav-list { flex-wrap: wrap; }
+  .js .nav-list { display: none; }
+  .js .nav-list.open { display: flex; flex-direction: column; align-items: stretch; width: 100%; margin-top: .75rem; padding: .5rem; background: var(--bg); border: 1px solid #4a4038; border-radius: 12px; }
+  .js .nav-list.open a { display: block; padding: .8rem 1rem; }
+  .js .nav-list.open .resume a { margin: .35rem 0 0; text-align: center; }
+}
+
+/* ---------- Hero ---------- */
+.hero { position: relative; isolation: isolate; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 7rem var(--gutter) 7.5rem; }
+
+/* The photo sits on a 4:3 "stage" that always covers the hero. Positions on the stage
+   (the annotation) are percentages of the photo itself, so they stay on the same objects
+   at every viewport size. --fx / --fy pick which part of the photo survives the crop. */
+.hero-media { position: absolute; inset: 0; z-index: -1; overflow: hidden; container-type: size; background: #1b1916; }
+.stage {
+  --w: calc(max(100cqw, 100cqh * 4 / 3) * var(--zoom));
+  position: absolute; width: var(--w); aspect-ratio: 4 / 3;
+  left: calc((100cqw - var(--w)) * var(--fx));
+  top: calc((100cqh - var(--w) * 3 / 4) * var(--fy));
+}
+.stage img { display: block; width: 100%; height: 100%; }
+/* Localized contrast: dark behind the text column, the nav and the scroll cue; the scale stays clear. */
+.hero-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(180deg, rgba(15, 12, 10, .88) 0, rgba(15, 12, 10, .7) 4.5rem, rgba(15, 12, 10, 0) 9rem),
+  linear-gradient(0deg, rgba(15, 12, 10, .8) 0, rgba(15, 12, 10, 0) 9rem),
+  linear-gradient(90deg, rgba(15, 12, 10, .9) 0%, rgba(15, 12, 10, .84) var(--fade-a, 32%), rgba(15, 12, 10, .55) var(--fade-b, 45%), rgba(15, 12, 10, 0) var(--fade-c, 56%)); }
+
+.hero-copy { max-width: 36rem; }
+.identity { margin: 0 0 1rem; font-weight: 600; font-size: 1.0625rem; color: var(--ink); }
+.identity span { color: var(--muted); font-weight: 500; }
+h1 { margin: 0 0 1.25rem; font: 600 clamp(2.6rem, 1.6rem + 4.2vw, 5.25rem)/1.02 var(--serif); letter-spacing: -.015em; }
+h1 span { display: block; }
+h1 .highlight { color: var(--accent); }
+.lede { margin: 0 0 2rem; max-width: 31rem; font-size: clamp(1.0625rem, 1rem + .3vw, 1.2rem); color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: .9rem 1.1rem; }
+.button { display: inline-flex; align-items: center; gap: .6rem; min-height: 48px; padding: .7rem 1.6rem; border-radius: 999px; font-weight: 600; text-decoration: none; }
+.button svg { width: 1.15rem; height: 1.15rem; }
+.button-secondary { border: 1.5px solid var(--ink); background: rgba(15, 12, 10, .45); }
+.button-secondary:hover { background: var(--ink); color: var(--accent-ink); }
+
+/* Handwritten annotation, pinned to the empty tabletop just below the scale. */
+.note { position: absolute; z-index: 2; left: var(--note-x); top: var(--note-y); width: var(--note-w); margin: 0;
+  font: 600 var(--note-size)/1.05 var(--hand); color: var(--accent); transform: rotate(-4deg);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .8); }
+/* The tabletop under the scale is light grey from overhead glare, so the note carries its own soft shadow. */
+.note::before { content: ""; position: absolute; inset: -3em -3.4em -3em -3.6em; z-index: -1;
+  background: radial-gradient(closest-side, rgba(15, 12, 10, .84) 0, rgba(15, 12, 10, .8) 52%, rgba(15, 12, 10, .45) 76%, rgba(15, 12, 10, 0) 100%); }
+.note-arrow { position: absolute; width: 3.6em; height: 3.6em; fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .7)); }
+
+.scroll-cue { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .45rem; padding: .35rem .6rem; font-size: .8125rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
+.scroll-cue svg { width: 2.4rem; height: 2.4rem; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.scroll-cue:hover { color: var(--ink); }
+
+/* Desktop and landscape tablets: full-bleed photo, copy on the left. */
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .stage { --zoom: 1.12; --fx: .15; --fy: .28; }
+  .note { --note-x: 53.5%; --note-y: 60.5%; --note-w: 12.5%; --note-size: clamp(1.4rem, .5rem + 1.2vw, 2.3rem); }
+  .note-arrow { left: -2.5em; top: -2.9em; }
+}
+/* Small laptops and landscape tablets: narrower copy, and the crop slides the scale right so text never sits on it. */
+@media (min-width: 900px) and (max-width: 1279px) and (min-aspect-ratio: 1/1) {
+  .stage { --zoom: 1.22; --fx: 0; --fy: .3; }
+  .hero-copy { max-width: min(36rem, 46vw); }
+  .hero-media { --fade-a: 44%; --fade-b: 53%; --fade-c: 62%; }
+}
+/* Very wide screens: no extra zoom, so the 1740 px source is not stretched further. */
+@media (min-width: 1600px) and (min-aspect-ratio: 1/1) { .stage { --zoom: 1; --fy: .2; } }
+
+/* Phones and portrait tablets: the photo becomes a band above the copy, so text never
+   covers the scale and the crop can center on the prep tools instead of the full table. */
+@media not ((min-width: 900px) and (min-aspect-ratio: 1/1)) {
+  .hero { min-height: 0; justify-content: flex-start; padding: 0 var(--gutter) 6rem; }
+  .hero-media { position: relative; inset: auto; z-index: 0; order: -1; margin: 0 calc(var(--gutter) * -1);
+    height: clamp(320px, 95vw, 600px); max-height: 60svh; min-height: 320px; }
+  .hero-media::after { background:
+    linear-gradient(180deg, rgba(15, 12, 10, .88) 0, rgba(15, 12, 10, .72) 3.75rem, rgba(15, 12, 10, 0) 7rem),
+    linear-gradient(0deg, var(--bg) 0, rgba(21, 18, 15, 0) 18%); }
+  .stage { --zoom: 1.4; --fx: .48; --fy: .3; }
+  .note { --note-x: 26%; --note-y: 60%; --note-w: 30%; --note-size: clamp(1.3rem, 1rem + 1.6vw, 1.85rem); }
+  .note-arrow { right: -1.2em; top: -2.7em; transform: scaleX(-1); }
+  .hero-copy { position: relative; z-index: 1; margin-top: -1.5rem; }
+  .scroll-cue { position: static; transform: none; align-self: center; margin-top: 3rem; }
+}
+
+/* ---------- Placeholder sections (navigation targets only, not designed) ---------- */
+.placeholder { padding: 4.5rem var(--gutter); border-top: 1px solid #3a322b; scroll-margin-top: 1rem; }
+.placeholder h2 { margin: 0 0 .5rem; font: 600 clamp(1.8rem, 1.4rem + 1.5vw, 2.6rem)/1.15 var(--serif); }
+.placeholder p { margin: 0; max-width: 40rem; color: var(--muted); }
+.placeholder .tag { display: inline-block; margin-bottom: .75rem; padding: .15rem .6rem; border: 1px solid #6b5f52; border-radius: 4px; font-size: .8125rem; color: var(--muted); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+footer { padding: 2rem var(--gutter) 3rem; border-top: 1px solid #3a322b; color: var(--muted); font-size: .9375rem; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <a class="wordmark" href="#top" aria-label="Betsy De La Cruz, home">Betsy De La Cruz</a>
+  <nav aria-label="Primary">
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="nav-list">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Menu
+    </button>
+    <ul class="nav-list" id="nav-list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#ai">AI</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li class="resume"><a href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">Résumé<span class="visually-hidden"> (PDF, opens in a new tab)</span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="identity">Betsy De La Cruz <span>— Full-stack Software Engineer</span></p>
+      <h1 id="hero-title"><span>Here’s what</span> <span class="highlight">Betsy brings</span> <span>to the table.</span></h1>
+      <p class="lede">I build software by understanding the problem, asking thoughtful questions, and bringing ideas from concept to implementation.</p>
+      <div class="actions">
+        <a class="button button-primary" href="#projects">View my work
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="button button-secondary" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">View résumé<span class="visually-hidden"> (PDF, opens in a new tab)</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></a>
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="stage">
+        <img src="photos/cooking-prep-1200.jpg"
+             srcset="photos/cooking-prep-800.jpg 800w, photos/cooking-prep-1200.jpg 1200w, photos/cooking-prep-1740.jpg 1740w"
+             sizes="(min-width: 900px) and (min-aspect-ratio: 1/1) 115vw, 165vw"
+             width="1740" height="1305" fetchpriority="high" decoding="async"
+             alt="Betsy’s kitchen table set up for baking: three empty steel mixing bowls, a digital kitchen scale, measuring cups, a handwritten recipe card, a red hand mixer and bags of flour and sugar.">
+        <p class="note">Good engineering starts with preparation.
+          <svg class="note-arrow" viewBox="0 0 60 60" aria-hidden="true"><path d="M50 54 C 44 34, 30 20, 10 10"/><path d="M10 10 L 22 10 M10 10 L 15 21"/></svg>
+        </p>
+      </div>
+    </div>
+
+    <a class="scroll-cue" href="#about">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5"/><path d="M20 12v15M14 21l6 6 6-6"/></svg>
+      Scroll to explore
+    </a>
+  </section>
+
+  <section class="placeholder" id="about" aria-labelledby="about-title">
+    <span class="tag">Placeholder</span>
+    <h2 id="about-title">About</h2>
+    <p>Not designed in this prototype. This section exists so the navigation has a real destination.</p>
+  </section>
+  <section class="placeholder" id="experience" aria-labelledby="experience-title">
+    <span class="tag">Placeholder</span>
+    <h2 id="experience-title">Experience</h2>
+    <p>Not designed in this prototype.</p>
+  </section>
+  <section class="placeholder" id="projects" aria-labelledby="projects-title">
+    <span class="tag">Placeholder</span>
+    <h2 id="projects-title">Projects</h2>
+    <p>Not designed in this prototype. “View my work” lands here.</p>
+  </section>
+  <section class="placeholder" id="ai" aria-labelledby="ai-title">
+    <span class="tag">Placeholder</span>
+    <h2 id="ai-title">AI</h2>
+    <p>Not designed in this prototype.</p>
+  </section>
+  <section class="placeholder" id="contact" aria-labelledby="contact-title">
+    <span class="tag">Placeholder</span>
+    <h2 id="contact-title">Contact</h2>
+    <p>Not designed in this prototype. Contact details still need confirming (DESIGN.md section C).</p>
+  </section>
+</main>
+
+<footer>Exploratory homepage prototype · not an approved design · photo: Betsy’s own</footer>
+
+<script>
+  // Mobile menu: a disclosure button. Without JavaScript the links stay visible and wrap.
+  document.documentElement.classList.add('js');
+  const button = document.querySelector('.menu-button');
+  const list = document.getElementById('nav-list');
+  const setOpen = (open) => { button.setAttribute('aria-expanded', String(open)); list.classList.toggle('open', open); };
+  button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+  list.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') { setOpen(false); button.focus(); }
+  });
+</script>
+</body>
+</html>

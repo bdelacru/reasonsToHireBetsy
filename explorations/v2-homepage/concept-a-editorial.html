@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept A · Colorful Editorial · Betsy De La Cruz (prototype)</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..900,50;1,9..144,400..900,50&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<style>
+/* EXPLORATORY PROTOTYPE. Colors, fonts and layout are not approved production choices. */
+:root {
+  --paper: #fbf5ec;
+  --paper-deep: #f3e7d6;
+  --ink: #1c1a27;
+  --ink-soft: #4a4458;
+  --tomato: #d7402b;       /* blocks and large type */
+  --tomato-text: #a8321d;  /* small text on paper */
+  --saffron: #f4b33e;
+  --teal: #0f5f5b;
+  --plum: #4b2160;
+  --rule: #1c1a27;
+  --display: 'Fraunces', Georgia, serif;
+  --body: 'Instrument Sans', system-ui, sans-serif;
+  --measure: 62ch;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.6 var(--body); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--plum); outline-offset: 3px; border-radius: 2px; }
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--saffron); }
+
+.skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 10; background: var(--ink); color: var(--paper); padding: .6rem 1rem; font-weight: 600; }
+.skip-link:focus { top: 1rem; }
+
+.proto-bar { background: var(--ink); color: var(--paper); font-size: .8125rem; padding: .45rem clamp(1rem, 4vw, 3rem); display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap; }
+.proto-bar a { color: var(--saffron); }
+
+.wrap { width: min(1240px, 100% - 2 * clamp(1rem, 4vw, 3rem)); margin-inline: auto; }
+
+/* Masthead */
+.masthead { border-bottom: 3px solid var(--rule); }
+.masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; padding-block: 1rem; }
+.wordmark { font: 800 1.35rem/1 var(--display); text-decoration: none; letter-spacing: -.01em; }
+.wordmark span { color: var(--tomato-text); }
+.masthead nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; align-items: center; }
+.masthead nav a { text-decoration: none; font-weight: 600; padding: .35rem 0; border-bottom: 2px solid transparent; }
+.masthead nav a:hover { border-color: var(--tomato); }
+.masthead nav .resume { border: 2px solid var(--ink); padding: .35rem .8rem; border-radius: 999px; }
+.masthead nav .resume:hover { background: var(--ink); color: var(--paper); }
+
+/* Hero: typographic, no photography */
+.hero { padding-block: clamp(2.5rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem); display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: clamp(2rem, 5vw, 4.5rem); align-items: end; }
+.kicker { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .8125rem; margin: 0 0 1.25rem; display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+.kicker .dot { width: .6rem; height: .6rem; background: var(--tomato); border-radius: 50%; display: inline-block; }
+.hero h1 { text-wrap: balance; font: 800 clamp(2.9rem, 8.4vw, 7.4rem)/.92 var(--display); letter-spacing: -.035em; margin: 0; font-variation-settings: 'SOFT' 50, 'opsz' 144; }
+.hero h1 em { font-style: italic; font-weight: 500; color: var(--tomato); }
+.hero h1 .hl { background: linear-gradient(transparent 62%, var(--saffron) 62%, var(--saffron) 92%, transparent 92%); padding-inline: .05em; }
+.lede { font-size: clamp(1.125rem, 1.6vw, 1.3rem); max-width: 46ch; margin: 1.75rem 0 0; color: var(--ink-soft); }
+.lede strong { color: var(--ink); }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .85rem 1.4rem; font-weight: 700; text-decoration: none; border: 2px solid var(--ink); border-radius: 999px; min-height: 48px; }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: var(--plum); border-color: var(--plum); }
+.btn-ghost:hover { background: var(--paper-deep); }
+
+.glance { background: var(--teal); color: #fff; padding: 1.5rem 1.5rem 1.75rem; position: relative; }
+.glance::before { content: ""; position: absolute; inset: -10px 10px 10px -10px; background: var(--saffron); z-index: -1; }
+.glance h2 { font: 700 .8125rem/1 var(--body); letter-spacing: .14em; text-transform: uppercase; margin: 0 0 1rem; }
+.glance dl { margin: 0; display: grid; gap: .9rem; }
+.glance dt { font-size: .8125rem; opacity: .85; }
+.glance dd { margin: 0; font: 600 1.05rem/1.35 var(--body); }
+
+/* Contents strip = functional in-page navigation */
+.contents { background: var(--tomato); color: #fff; }
+.contents ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+.contents li + li { border-left: 2px solid rgba(255,255,255,.35); }
+.contents a { display: block; padding: 1.1rem 1rem; text-decoration: none; font-weight: 600; line-height: 1.25; min-height: 48px; }
+.contents a span { display: block; font: italic 500 1.6rem/1 var(--display); margin-bottom: .3rem; }
+.contents a:hover { background: rgba(0,0,0,.15); }
+.contents :focus-visible { outline-color: #fff; outline-offset: -5px; }
+
+section { scroll-margin-top: 1rem; }
+.section { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+.section-head { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 1.5rem; align-items: start; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.num { font: italic 500 clamp(3rem, 6vw, 4.5rem)/.8 var(--display); color: var(--tomato); }
+.eyebrow { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .8125rem; margin: 0 0 .5rem; color: var(--tomato-text); }
+h2 { font: 750 clamp(2rem, 4.4vw, 3.5rem)/1.02 var(--display); letter-spacing: -.025em; margin: 0; max-width: 20ch; }
+h3 { font: 700 1.4rem/1.15 var(--display); margin: 0 0 .5rem; letter-spacing: -.01em; }
+p { max-width: var(--measure); }
+
+/* 01 How I work: three columns with a drop cap */
+.principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 3px solid var(--rule); }
+.principles article { padding: 1.75rem 1.75rem 0 0; }
+.principles article + article { padding-left: 1.75rem; border-left: 1px solid var(--rule); }
+.principles p:first-of-type::first-letter { font: 800 3.4rem/.8 var(--display); float: left; margin: .35rem .5rem 0 0; color: var(--teal); }
+.stack { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: .5rem; padding: 0; list-style: none; }
+.stack li { border: 1.5px solid var(--ink); border-radius: 999px; padding: .3rem .85rem; font-size: .9375rem; font-weight: 600; }
+.stack li:nth-child(4n+1) { background: var(--saffron); border-color: var(--saffron); }
+
+/* 02 Experience: editorial timeline */
+.experience { background: var(--paper-deep); }
+.roles { display: grid; gap: 0; }
+.role { display: grid; grid-template-columns: 220px minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem 2.5rem; padding-block: 2rem; border-top: 3px solid var(--rule); }
+.role time { font: italic 600 1.6rem/1.1 var(--display); }
+.role .org { font: 800 clamp(1.6rem, 3vw, 2.4rem)/1 var(--display); margin: 0 0 .35rem; }
+.role .title { font-weight: 600; color: var(--ink-soft); margin: 0; }
+.role ul { margin: 0; padding-left: 1.1rem; }
+.role li { margin-bottom: .4rem; }
+.role:nth-child(1) .org { color: var(--tomato-text); }
+.role:nth-child(2) .org { color: var(--teal); }
+.role:nth-child(3) .org { color: var(--plum); }
+
+/* Interlude: first photograph on the page */
+.interlude { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); background: var(--ink); color: var(--paper); }
+.interlude img { width: 100%; height: 100%; max-height: 520px; object-fit: cover; }
+.interlude .note { padding: clamp(2rem, 5vw, 4rem); align-self: center; }
+.interlude .note p { font: italic 500 clamp(1.4rem, 2.6vw, 2.1rem)/1.2 var(--display); margin: 0 0 1rem; max-width: 22ch; }
+.interlude .note small { font-size: .9375rem; opacity: .85; }
+.interlude a { color: var(--saffron); }
+
+/* 03 Selected work: asymmetric layout */
+.work-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
+.case { border: 3px solid var(--rule); padding: 1.75rem; display: flex; flex-direction: column; gap: .5rem; background: var(--paper); }
+.case.feature { grid-column: span 7; grid-row: span 2; background: var(--saffron); border-color: var(--saffron); }
+.case.feature h3 { font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.02; }
+.case:not(.feature) { grid-column: span 5; }
+.case .meta { font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.status { margin-top: auto; padding-top: 1rem; font-size: .875rem; font-weight: 700; }
+.status::before { content: "● "; color: var(--tomato-text); }
+.feature .status::before { color: var(--ink); }
+.questions { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem 1.25rem; counter-reset: q; }
+.questions li { counter-increment: q; font-weight: 500; padding-left: 2rem; position: relative; }
+.questions li::before { content: counter(q, decimal-leading-zero); position: absolute; left: 0; font: italic 700 1rem var(--display); }
+
+/* 04 AI: dark plum spread with a pull quote */
+.ai { background: var(--plum); color: #fff; }
+.ai .num, .ai .eyebrow { color: var(--saffron); }
+.ai-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.pull { font: italic 600 clamp(1.7rem, 3.4vw, 2.8rem)/1.12 var(--display); margin: 0; padding-left: 1.5rem; border-left: 6px solid var(--saffron); max-width: 24ch; }
+.docmap { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+.docmap li { border: 2px solid rgba(255,255,255,.5); padding: .9rem 1rem; }
+.docmap strong { display: block; font: 700 1.1rem var(--display); }
+.ai p { color: #f2ebf5; }
+
+/* 05 Off the clock: photography grows here */
+.personal-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.25rem; align-items: start; }
+.personal-grid figure { margin: 0; }
+.personal-grid figcaption { font-size: .875rem; margin-top: .5rem; color: var(--ink-soft); }
+.p-lead { grid-column: 1 / span 7; }
+.p-copy { grid-column: 8 / span 5; }
+.p-tamales { grid-column: 1 / span 4; }
+.p-cake { grid-column: 5 / span 3; }
+.p-interests { grid-column: 8 / span 5; }
+.interests { list-style: none; margin: 0; padding: 0; border-top: 3px solid var(--rule); }
+.interests li { display: grid; grid-template-columns: 120px 1fr; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); }
+.interests strong { font: 700 1.15rem var(--display); }
+
+/* Contact */
+.contact { background: var(--tomato); color: #fff; }
+.contact h2 { font-size: clamp(2.4rem, 6vw, 5rem); max-width: 16ch; }
+.contact p { font-size: 1.15rem; }
+.contact .btn { border-color: #fff; color: #fff; }
+.contact .btn-primary { background: #fff; color: var(--ink); }
+.contact .btn-primary:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+.contact :focus-visible { outline-color: #fff; }
+footer { padding-block: 2rem; font-size: .9375rem; }
+footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+.placeholder { font-size: .8125rem; font-weight: 700; color: var(--tomato-text); background: #fff; border: 1.5px dashed currentColor; padding: .1rem .45rem; border-radius: 4px; white-space: nowrap; }
+
+/* Progressive reveal (only with JS and when motion is allowed) */
+.reveal { transition: opacity .7s ease, transform .7s ease; }
+.js .reveal:not(.in) { opacity: 0; transform: translateY(28px); }
+@media (prefers-reduced-motion: reduce) { .reveal { transition: none; } .js .reveal:not(.in) { opacity: 1; transform: none; } }
+
+/* Responsive */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; }
+  .glance { max-width: 520px; }
+  .contents ol { grid-template-columns: repeat(3, 1fr); }
+  .contents li:nth-child(4) { border-left: 0; }
+  .contents li { border-top: 2px solid rgba(255,255,255,.35); }
+  .role { grid-template-columns: 1fr; gap: .75rem; }
+  .interlude, .ai-grid { grid-template-columns: 1fr; }
+  .case.feature, .case:not(.feature) { grid-column: 1 / -1; }
+  .p-lead, .p-copy, .p-interests { grid-column: 1 / -1; }
+  .p-tamales { grid-column: 1 / span 7; } .p-cake { grid-column: 8 / span 5; }
+}
+@media (max-width: 640px) {
+  .section-head { grid-template-columns: 1fr; gap: .5rem; }
+  .principles { grid-template-columns: 1fr; }
+  .principles article + article { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .principles article { padding-bottom: 1.5rem; }
+  .contents ol { grid-template-columns: repeat(2, 1fr); }
+  .contents li { border-left: 0 !important; }
+  .questions, .docmap { grid-template-columns: 1fr; }
+  .p-tamales, .p-cake { grid-column: 1 / -1; }
+  .interests li { grid-template-columns: 1fr; gap: .1rem; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="proto-bar" role="note"><span><strong>Prototype</strong> · Concept A of 3: Colorful Editorial · exploratory, not an approved design</span><a href="index.html">All concepts</a></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Betsy De La Cruz<span>.</span></a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#how-i-work">How I work</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#ai">AI</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a class="resume" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">Résumé <span aria-hidden="true">↗</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap hero" id="top">
+    <div>
+      <p class="kicker"><span class="dot" aria-hidden="true"></span>Betsy De La Cruz · Full-stack software engineer · Chicago</p>
+      <h1>I think <em>beyond</em> the code in front of <span class="hl">me.</span></h1>
+      <p class="lede">I’m a full-stack software engineer with <strong>7+ years of experience</strong>. I like understanding the entire problem, from the user experience to the backend, infrastructure and production behavior, before deciding what the right solution should be.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">View résumé</a>
+        <a class="btn btn-ghost" href="mailto:betsydelacru@gmail.com">Email me</a>
+      </div>
+    </div>
+    <aside class="glance on-dark" aria-labelledby="glance-heading">
+      <h2 id="glance-heading">At a glance</h2>
+      <dl>
+        <div><dt>Now</dt><dd>Software Engineer II, Sinch (Next Generation 911)</dd></div>
+        <div><dt>Core stack</dt><dd>Kotlin/Java, Spring Boot, React, TypeScript, REST APIs</dd></div>
+        <div><dt>Looking for</dt><dd>Software Engineer II through Senior full-stack roles</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <nav class="contents" aria-label="On this page">
+    <div class="wrap">
+      <ol>
+        <li><a href="#how-i-work"><span>01</span>How I work</a></li>
+        <li><a href="#experience"><span>02</span>Experience</a></li>
+        <li><a href="#work"><span>03</span>Selected work</a></li>
+        <li><a href="#ai"><span>04</span>AI-assisted development</a></li>
+        <li><a href="#personal"><span>05</span>Off the clock</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="section" id="how-i-work" aria-labelledby="h-how">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="num" aria-hidden="true">01</span>
+        <div><p class="eyebrow">How I work</p><h2 id="h-how">Good engineering starts before implementation.</h2></div>
+      </div>
+      <div class="principles">
+        <article class="reveal">
+          <h3>I zoom out before I zoom in.</h3>
+          <p>Before I start changing code, I want to understand the user, the system around the change, and how we will know the solution is actually working.</p>
+        </article>
+        <article class="reveal">
+          <h3>I follow the problem across layers.</h3>
+          <p>Sometimes the answer is in the UI. Sometimes it is an API, a database query, deployment configuration, or the logs. I care more about finding the real cause than protecting a favorite layer.</p>
+        </article>
+        <article class="reveal">
+          <h3>I ask one more question.</h3>
+          <p>A ticket can say “add search,” but the useful questions are what people need to find, how they expect it to behave, and what happens when the happy path is not enough.</p>
+        </article>
+      </div>
+      <ul class="stack" aria-label="Technologies I work with">
+        <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>React</li><li>TypeScript</li><li>REST APIs</li><li>PostgreSQL</li><li>MongoDB</li><li>AWS</li><li>Kubernetes</li><li>OpenShift</li><li>Datadog</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section experience" id="experience" aria-labelledby="h-exp">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="num" aria-hidden="true">02</span>
+        <div><p class="eyebrow">Experience</p><h2 id="h-exp">7+ years. Three very different engineering environments.</h2></div>
+      </div>
+      <div class="roles">
+        <article class="role reveal">
+          <time>Aug 2025 – Now</time>
+          <div><p class="org">Sinch</p><p class="title">Software Engineer II · Next Generation 911</p></div>
+          <ul>
+            <li>Full-stack applications for NG911 call routing and emergency communication (Kotlin/Java, Spring Boot, React).</li>
+            <li>Evaluates search and filtering experiences and proposes UX alternatives with stakeholders.</li>
+            <li>Leads AI-assisted engineering initiatives with GitHub Copilot and Claude.</li>
+          </ul>
+        </article>
+        <article class="role reveal">
+          <time>Jul 2023 – Aug 2025</time>
+          <div><p class="org">JPMorgan Chase &amp; Co.</p><p class="title">Software Engineer II · Digital Document Services</p></div>
+          <ul>
+            <li>Developed the Authoriti API supporting the migration of 30M+ digital documents from MongoDB to PostgreSQL.</li>
+            <li>AWS, Terraform and Spinnaker for infrastructure and deployment workflows.</li>
+          </ul>
+        </article>
+        <article class="role reveal">
+          <time>Jun 2019 – Jul 2023</time>
+          <div><p class="org">Vanguard</p><p class="title">Application Engineer I / II · Digital Advisor</p></div>
+          <ul>
+            <li>Engineered 10+ Java REST APIs on AWS for platforms serving 100K+ daily users.</li>
+            <li>WCAG-aligned accessibility improvements: keyboard navigation and screen-reader support.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <aside class="interlude on-dark reveal" aria-label="Interlude">
+    <img src="photos/steak-bites-mashed-potatoes-close-up.jpg" width="1400" height="1050" loading="lazy" decoding="async"
+         alt="Seared steak bites over mashed potatoes with roasted carrots and asparagus, cooked by Betsy.">
+    <div class="note">
+      <p>Away from the keyboard, I cook. Same habit: understand it, then make it.</p>
+      <small>One of my own photographs. There’s more <a href="#personal">off the clock</a>.</small>
+    </div>
+  </aside>
+
+  <section class="section" id="work" aria-labelledby="h-work">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="num" aria-hidden="true">03</span>
+        <div><p class="eyebrow">Selected work</p><h2 id="h-work">Some problems I’ve spent time thinking about.</h2></div>
+      </div>
+      <div class="work-grid">
+        <article class="case feature reveal">
+          <div class="meta"><span>Case study 01</span><span>UX · Frontend · Accessibility</span></div>
+          <h3>Search isn’t always just a search bar.</h3>
+          <p>A research-driven look at global search, field-specific search, filters, matching behavior, empty states and accessibility, before committing to the implementation.</p>
+          <ol class="questions" aria-label="Questions I ask before implementing search">
+            <li>What are users actually trying to find?</li>
+            <li>Which fields should be searchable?</li>
+            <li>Exact, partial, or case-insensitive matching?</li>
+            <li>Would filters communicate intent more clearly?</li>
+            <li>Can someone use it fully with a keyboard?</li>
+            <li>What happens when nothing matches?</li>
+          </ol>
+          <p class="status">Detailed write-up in progress</p>
+        </article>
+        <article class="case reveal">
+          <div class="meta"><span>Case study 02</span><span>AI · Dev experience</span></div>
+          <h3>Giving AI the right context without creating documentation chaos.</h3>
+          <p>What information belongs where so humans and AI can both trust it? <a href="#ai">More below.</a></p>
+          <p class="status">Summary only</p>
+        </article>
+        <article class="case reveal">
+          <div class="meta"><span>Case study 03</span><span>Systems · Observability</span></div>
+          <h3>When the answer isn’t in one layer.</h3>
+          <p>An anonymized investigation following production behavior across application code, infrastructure, configuration and observability signals.</p>
+          <p class="status">Coming next</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section ai on-dark" id="ai" aria-labelledby="h-ai">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="num" aria-hidden="true">04</span>
+        <div><p class="eyebrow">AI-assisted development</p><h2 id="h-ai">Useful context beats a clever prompt.</h2></div>
+      </div>
+      <div class="ai-grid">
+        <div>
+          <p class="pull reveal">AI output is a hypothesis until the real system verifies it.</p>
+          <p>At Sinch I lead AI-assisted engineering initiatives using GitHub Copilot and Claude: UI development, repository guidance, team workflows and automation opportunities.</p>
+          <p>This site’s v2 redesign is being planned the same way: instructions, design direction and research live in separate documents, with decisions recorded before code changes.</p>
+        </div>
+        <ul class="docmap reveal" aria-label="Where each kind of information lives">
+          <li><strong>README</strong>How do I run it?</li>
+          <li><strong>Agent guide</strong>What must AI know?</li>
+          <li><strong>Issue docs</strong>Why this change?</li>
+          <li><strong>Feature docs</strong>What stays true?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="personal" aria-labelledby="h-personal">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="num" aria-hidden="true">05</span>
+        <div><p class="eyebrow">Off the clock</p><h2 id="h-personal">Engineering is a big part of me. It isn’t all of me.</h2></div>
+      </div>
+      <div class="personal-grid">
+        <figure class="p-lead reveal">
+          <img src="photos/shell-pasta-soup-with-rolled-tacos.jpg" width="1400" height="1050" loading="lazy" decoding="async"
+               alt="A white bowl of shell-pasta soup topped with cilantro and crumbled cheese, with two crispy rolled tacos.">
+          <figcaption>Shell-pasta soup with rolled tacos. All photos are my own cooking.</figcaption>
+        </figure>
+        <div class="p-copy reveal">
+          <p>I like teams where curiosity, clarity, humor and care for the people using what we build are treated as engineering strengths, not extras.</p>
+          <p>I will absolutely tell you what I made this week.</p>
+        </div>
+        <figure class="p-tamales reveal">
+          <img src="photos/tamales-in-steamer-pot.jpg" width="1400" height="996" loading="lazy" decoding="async"
+               alt="Dozens of tamales standing upright in a steamer pot, red chile filling visible.">
+          <figcaption>Tamales, a whole batch at once.</figcaption>
+        </figure>
+        <figure class="p-cake reveal">
+          <img src="photos/heart-red-velvet-cake-xoxo.jpg" width="1346" height="1400" loading="lazy" decoding="async"
+               alt="A heart-shaped cake with white frosting, coral piped borders and XOXO written in red.">
+          <figcaption>Heart-shaped red velvet.</figcaption>
+        </figure>
+        <ul class="interests p-interests reveal" aria-label="Interests">
+          <li><strong>Music</strong><span>Violin, piano and guitar.</span></li>
+          <li><strong>Cooking</strong><span>The photos on this page are all mine.</span></li>
+          <li><strong>Mickey</strong><span>Unofficial engineering manager. Very demanding.</span></li>
+          <li><strong>Mentoring</strong><span>I care about helping other people find their footing.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact on-dark" id="contact" aria-labelledby="h-contact">
+    <div class="wrap">
+      <p class="eyebrow" style="color:#fff">Let’s talk</p>
+      <h2 id="h-contact">Have a problem worth understanding?</h2>
+      <p>I’m currently exploring my next software engineering opportunity.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="mailto:betsydelacru@gmail.com">Email me</a>
+        <a class="btn" href="https://github.com/bdelacru">GitHub</a>
+        <a class="btn" href="../../frontend/public/Betsy_De_La_Cruz_Resume_.pdf">Résumé</a>
+        <span class="placeholder">LinkedIn: link needed</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>Designed &amp; built by Betsy De La Cruz.</span><span>Chicago · 2026</span></div>
+</footer>
+
+<script>
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || location.search.includes('static') || !('IntersectionObserver' in window);
+  if (still) { els.forEach(el => el.classList.add('in')); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
