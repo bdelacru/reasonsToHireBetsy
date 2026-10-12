@@ -1,0 +1,106 @@
+/* Standalone Magic 8-Ball (/apps/magic-8-ball). The original April 2025 look: a soft peach-to-pink page,
+   a white card, a purple question and button. Loaded only by this page; the homepage's index.css isn't used. */
+:root {
+  --m8-purple: #6b21a8;
+  --m8-purple-dark: #4c1d95;
+  --m8-ink: #1f1a24;
+  --m8-muted: #5a5262;
+  --m8-line: #e8dcef;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: #fbe8dd; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--m8-ink);
+  font: 1.0625rem/1.6 system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #fdf3d8 0%, #fbe3dc 55%, #f8d9e6 100%);
+}
+
+a { color: var(--m8-purple-dark); }
+
+:focus-visible { outline: 3px solid var(--m8-ink); outline-offset: 3px; border-radius: 6px; }
+
+.m8-page { width: min(44rem, 100% - 2rem); margin: 0 auto; }
+
+.m8-top { padding: 1rem 0; }
+
+.m8-back { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; font-weight: 700; text-decoration: none; }
+.m8-back:hover { text-decoration: underline; }
+
+.m8-card {
+  padding: clamp(1.25rem, 5vw, 2.5rem);
+  border-radius: 28px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(107, 33, 168, .12);
+}
+
+.m8-illustration { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; border-radius: 20px; }
+
+.m8-ball {
+  width: 64px;
+  height: 64px;
+  margin: 1.5rem auto 1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--m8-purple-dark);
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.6rem;
+}
+
+.m8-question { margin: 0 0 1.5rem; font-size: clamp(1.9rem, 1.3rem + 3vw, 2.9rem); line-height: 1.1; font-weight: 800; color: var(--m8-purple); }
+
+.m8-shake {
+  min-height: 48px;
+  padding: .75rem 1.75rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--m8-purple);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.m8-shake:hover { background: var(--m8-purple-dark); }
+.m8-shake[aria-disabled='true'] { opacity: .75; cursor: progress; }
+
+.m8-result { min-height: 1rem; }
+
+.m8-answer { margin: 1.5rem 0 0; font: italic 700 1.6rem/1.3 Georgia, 'Times New Roman', serif; color: var(--m8-purple); }
+
+.m8-reason {
+  margin: 1.25rem auto 0;
+  max-width: 34rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--m8-line);
+  border-radius: 20px;
+  background: #faf7fc;
+  text-align: left;
+}
+.m8-reason h2 { margin: 0 0 .5rem; font-size: 1.35rem; line-height: 1.3; }
+.m8-reason p { margin: 0 0 .75rem; }
+.m8-reason p:last-child { margin-bottom: 0; }
+
+.m8-type { font-size: .875rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--m8-muted); }
+
+.m8-note { font-size: .875rem; color: var(--m8-muted); }
+
+.m8-footer { padding: 1.5rem 0 2.5rem; text-align: center; font-size: .9375rem; color: var(--m8-muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .m8-ball.is-shaking { animation: m8-shake .5s ease-in-out; }
+}
+
+@keyframes m8-shake {
+  0%, 100% { transform: none; }
+  20% { transform: translateX(-8px) rotate(-8deg); }
+  40% { transform: translateX(8px) rotate(8deg); }
+  60% { transform: translateX(-5px) rotate(-4deg); }
+  80% { transform: translateX(5px) rotate(4deg); }
+}
