@@ -7,3 +7,10 @@ backend/target/maven-status/*
 backend/target/surefire-reports/*
 backend/target/site/*   
 backend/target/maven-status/maven-compiler-plugin/compile/default-compile/*
+
+# Local original photos (contain GPS metadata; never commit)
+originals/
+
+# Editor settings and TypeScript's incremental build cache
+.idea/
+*.tsbuildinfo
