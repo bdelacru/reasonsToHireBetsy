@@ -1,13 +1,487 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/faveicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reasons to Hire Betsy</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Betsy De La Cruz · Full-stack Software Engineer</title>
+<meta name="description" content="Betsy De La Cruz is a full-stack software engineer in Chicago with 7+ years at Sinch, JPMorgan Chase and Vanguard. Her portfolio is her own wooden recipe box: open it to see her experience, projects and résumé.">
+<!--
+  The recipe-box portfolio: Betsy's real wooden recipe box, opened to show the portfolio as index cards.
+  Styles and behavior: src/portfolio/. Decision: docs/decisions/0002-recipe-box-portfolio-homepage.md.
+  Write-up of the interaction: docs/research/v2-recipe-box-interaction.md.
+-->
+<link rel="icon" type="image/png" href="/faveicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<!-- Decide the first view before anything renders: no #/ route shows the closed box, a route opens straight to it. -->
+<script>document.documentElement.dataset.box = /^#\//.test(location.hash) ? 'open' : 'closed';</script>
+<link rel="stylesheet" href="/src/portfolio/portfolio.css">
+<noscript><style>.card[hidden] { display: block; margin-top: 1.5rem; }
+  .recipe-stack { display: block; transform: none; } .pcard { transform: none; margin-top: 2rem; } .stack-controls, .stack-hint { display: none; }</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#/">Skip the recipe box and go to the portfolio</a>
+
+<!-- ===== Landing: the closed recipe box ===== -->
+<div class="landing" data-landing>
+  <header class="landing-head">
+    <h1>Betsy De La Cruz</h1>
+    <p>Full-stack Software Engineer · Chicago</p>
+  </header>
+
+  <button type="button" class="box-button" data-open>
+    <span class="scene" aria-hidden="true">
+      <span class="shadow"></span>
+      <span class="box3d">
+        <span class="face base-back"></span>
+        <span class="face base-side base-left"></span>
+        <span class="face base-side base-right"></span>
+        <span class="inside">
+          <!-- Back to front. --x is where each divider's tab sits; --rise is how far it comes up when the box opens. -->
+          <span class="divider c-about" style="--z: -24; --x: 76%; --rise: 13; --i: 4"><span class="divider-tab">About</span></span>
+          <span class="divider recipe-card" style="--z: -17; --rise: 7; --i: 3"></span>
+          <span class="divider c-ai" style="--z: -11; --x: 57%; --rise: 12; --i: 3"><span class="divider-tab">AI &amp; Learning</span></span>
+          <span class="divider c-projects" style="--z: -3; --x: 38%; --rise: 11; --i: 2"><span class="divider-tab">Projects</span></span>
+          <span class="divider recipe-card" style="--z: 5; --rise: 6; --i: 1"></span>
+          <span class="divider c-experience" style="--z: 11; --x: 19%; --rise: 10; --i: 1"><span class="divider-tab">Experience</span></span>
+          <span class="divider c-home" style="--z: 19; --x: 2%; --rise: 9; --i: 0"><span class="divider-tab">Home</span></span>
+        </span>
+        <span class="face tex base-front"><span class="box-label">Betsy’s Recipes</span></span>
+        <span class="lid">
+          <span class="face tex lid-top"></span>
+          <span class="face tex lid-inside"></span>
+          <span class="face lid-back"></span>
+          <span class="face lid-side lid-left"></span>
+          <span class="face lid-side lid-right"></span>
+          <span class="face tex lid-front">
+            <svg class="hasp" viewBox="0 0 120 170" aria-hidden="true">
+              <rect x="34" y="0" width="52" height="26" rx="4" fill="#2f2a22"/>
+              <circle cx="46" cy="13" r="4" fill="#4a4236"/><circle cx="74" cy="13" r="4" fill="#4a4236"/>
+              <rect x="14" y="20" width="92" height="140" rx="12" fill="none" stroke="#2b261f" stroke-width="15"/>
+              <rect x="14" y="20" width="92" height="140" rx="12" fill="none" stroke="#5a5040" stroke-width="3" transform="translate(-2 -2)"/>
+            </svg>
+          </span>
+        </span>
+      </span>
+    </span>
+    <span class="open-label">Open the recipe box
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </button>
+
+  <ul class="landing-links">
+    <li><a href="#/">Go straight to the portfolio</a></li>
+    <li><a href="/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">Résumé (PDF)<span class="visually-hidden">, opens in a new tab</span></a></li>
+  </ul>
+  <button type="button" class="skip-anim" data-skip hidden>Skip animation</button>
+</div>
+
+<!-- ===== Portfolio: the open box ===== -->
+<div class="portfolio" data-portfolio>
+  <header class="site-header">
+    <a class="wordmark" href="#/">
+      <span class="wordmark-name">Betsy De La Cruz</span>
+      <span class="wordmark-role">Full-stack Software Engineer · Chicago</span>
+    </a>
+    <div class="header-actions">
+      <a class="pill pill-outline" href="#contact">Contact</a>
+      <a class="pill pill-butter" href="/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">Résumé<span class="visually-hidden"> (PDF, opens in a new tab)</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></a>
+    </div>
+  </header>
+
+  <div class="open-box">
+    <div class="lid-open" aria-hidden="true"></div>
+    <div class="index">
+      <nav class="tabs" aria-label="Portfolio sections">
+        <ul>
+          <li><a class="tab c-home" href="#/" data-route="home" aria-current="page">Home</a></li>
+          <li><a class="tab c-experience" href="#/experience" data-route="experience">Experience</a></li>
+          <li><a class="tab c-projects" href="#/projects" data-route="projects">Projects</a></li>
+          <li><a class="tab c-ai" href="#/ai" data-route="ai">AI &amp; Learning</a></li>
+          <li><a class="tab c-about" href="#/about" data-route="about">About</a></li>
+        </ul>
+      </nav>
+
+      <main class="cards" id="main" tabindex="-1">
+
+        <!-- ===== Home ===== -->
+        <article class="card c-home" data-card="home" aria-labelledby="home-title">
+          <div class="card-head">
+            <p class="identity">Betsy De La Cruz <span>— Full-stack Software Engineer</span></p>
+            <h1 id="home-title" tabindex="-1">Here’s what <span class="highlight">Betsy brings</span> to the table.</h1>
+          </div>
+          <p class="lede">I build software by understanding the problem, asking thoughtful questions, and bringing ideas from concept to implementation.</p>
+          <div class="actions">
+            <a class="button button-dark" href="#/projects">See selected work
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="button button-line" href="#/experience">Experience</a>
+          </div>
+          <dl class="glance">
+            <div><dt>Experience</dt><dd>7+ years: Sinch, JPMorgan Chase, Vanguard</dd></div>
+            <div><dt>Current work</dt><dd>Full-stack applications for Next Generation 911 (NG911) call routing</dd></div>
+            <div><dt>Day to day</dt><dd>Java and Kotlin, Spring Boot, React, REST APIs, PostgreSQL, AWS, Kubernetes</dd></div>
+            <div><dt>Education</dt><dd>B.S. in Computer Science, Villanova University</dd></div>
+          </dl>
+          <figure class="card-photo" style="--mpos: 52% 42%">
+            <img src="/src/portfolio/photos/cooking-prep-800.jpg"
+                 srcset="/src/portfolio/photos/cooking-prep-800.jpg 800w, /src/portfolio/photos/cooking-prep-1200.jpg 1200w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="800" height="600" loading="lazy" decoding="async"
+                 alt="Betsy’s kitchen table set up for baking: empty steel mixing bowls, a digital kitchen scale, measuring cups and bags of flour and sugar.">
+            <figcaption>Good engineering starts with preparation.</figcaption>
+          </figure>
+        </article>
+
+        <!-- ===== Experience ===== -->
+        <article class="card c-experience" data-card="experience" aria-labelledby="experience-title" hidden>
+          <div class="card-head">
+            <p class="card-kicker">Experience</p>
+            <h1 id="experience-title" tabindex="-1">Seven years, three very different engineering environments</h1>
+          </div>
+          <ol class="roles">
+            <li class="role">
+              <p class="role-dates">Aug 2025 – Present</p>
+              <div>
+                <h2>Sinch</h2>
+                <p class="title">Software Engineer II · Next Generation 911 (NG911)</p>
+                <p>Full-stack applications supporting NG911 call routing and emergency communication. I partner with stakeholders on requirements and UX, lead AI-assisted engineering initiatives, and troubleshoot production and environment-specific issues.</p>
+                <p class="stack">Kotlin/Java, Spring Boot, React, REST APIs, PostgreSQL, MongoDB, Kubernetes, OpenShift, Datadog</p>
+              </div>
+            </li>
+            <li class="role">
+              <p class="role-dates">Jul 2023 – Aug 2025</p>
+              <div>
+                <h2>JPMorgan Chase &amp; Co.</h2>
+                <p class="title">Software Engineer II · Digital Document Services</p>
+                <p>Java REST APIs and backend services for enterprise digital document systems, plus cloud infrastructure, configuration and deployment workflows. Temporary Scrum Master, coordinating engineering and business stakeholders.</p>
+                <p class="stack">Java, REST APIs, MongoDB, PostgreSQL, AWS, Terraform, Spinnaker</p>
+              </div>
+            </li>
+            <li class="role">
+              <p class="role-dates">Jun 2019 – Jul 2023</p>
+              <div>
+                <h2>Vanguard</h2>
+                <p class="title">Application Engineer I and II · Digital Advisor, Client Experience Digital Security Lab</p>
+                <p>Java RESTful APIs on AWS, accessibility improvements for customer-facing UIs, and production support including debugging and incident response. Subject Matter Expert for Splunk, PagerDuty and Honeycomb.</p>
+                <p class="stack">Java, REST APIs, AWS, Splunk, PagerDuty, Honeycomb</p>
+              </div>
+            </li>
+          </ol>
+          <p class="muted" style="margin-top:1.25rem">B.S. in Computer Science, Villanova University, 2019</p>
+          <figure class="card-photo" style="--ratio: 4 / 5; --mpos: 50% 85%">
+            <img src="/src/portfolio/photos/separating-eggs-560.jpg"
+                 srcset="/src/portfolio/photos/separating-eggs-560.jpg 560w, /src/portfolio/photos/separating-eggs-822.jpg 822w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="560" height="889" loading="lazy" decoding="async"
+                 alt="Baking in progress: separated egg whites and yolks in steel bowls, a bowl of flour with a whisk, and a handwritten recipe card.">
+          </figure>
+        </article>
+
+        <!-- ===== Projects =====
+             A small stack of three project cards, taken out of the box and held. Previous/Next, arrow keys,
+             swipes and clicking a card behind the front one all move through them. -->
+        <article class="card c-projects" data-card="projects" aria-labelledby="projects-title" hidden>
+          <div class="card-head">
+            <p class="card-kicker">Projects</p>
+            <h1 id="projects-title" tabindex="-1">Things I built to learn</h1>
+          </div>
+          <p class="lede">Personal projects where I tried something new and learned from real problems. My professional work is under <a href="#/experience">Experience</a>.</p>
+
+          <section class="hand" aria-roledescription="carousel" aria-label="Projects">
+            <div class="recipe-stack">
+
+              <article class="pcard pcard-8ball" role="group" aria-roledescription="slide" aria-label="1 of 3" data-project="magic-8-ball">
+                <p class="pcard-num" aria-hidden="true">Project 1 of 3</p>
+                <div class="pcard-body">
+                  <div class="pcard-text">
+                    <p class="project-label">Featured · April 2025</p>
+                    <h2 tabindex="-1">Magic 8-Ball</h2>
+                    <p>It started as an experiment: a Magic 8-Ball that answers “Is Betsy your next great hire?” It became my crash course in connecting a frontend, a backend, a database and a deployed app.</p>
+                    <ul class="pcard-points">
+                      <li>React and TypeScript, a Spring Boot API, PostgreSQL</li>
+                      <li>Real lessons in CORS, environment config and database migrations</li>
+                    </ul>
+                  </div>
+                  <figure class="pcard-shot">
+                    <img src="/src/portfolio/photos/magic-8-ball-2025-800.jpg" srcset="/src/portfolio/photos/magic-8-ball-2025-800.jpg 800w, /src/portfolio/photos/magic-8-ball-2025-1200.jpg 1200w"
+                         sizes="(min-width: 1200px) 20rem, (min-width: 700px) 40vw, 85vw" width="800" height="486" decoding="async"
+                         alt="The first Magic 8-Ball site, April 2025: a cartoon of Betsy holding a Magic 8-Ball between two dogs, the question “Is Betsy your next great hire?” and the answer “1000% yes.”">
+                  </figure>
+                </div>
+                <div class="pcard-actions">
+                  <a class="button button-dark" href="#/projects/magic-8-ball">View project details<span class="visually-hidden">: Magic 8-Ball</span></a>
+                  <a class="pcard-link" href="/apps/magic-8-ball/">Play Magic 8-Ball<span class="link-note">Opens the standalone game</span></a>
+                </div>
+              </article>
+
+              <article class="pcard pcard-festival" role="group" aria-roledescription="slide" aria-label="2 of 3" data-project="church-festival">
+                <p class="pcard-num" aria-hidden="true">Project 2 of 3</p>
+                <div class="pcard-body">
+                  <div class="pcard-text">
+                    <p class="project-label">Personal project · Built with Lovable</p>
+                    <h2 tabindex="-1">Church Festival Signup</h2>
+                    <p class="pcard-stat"><strong>300+</strong> people used it</p>
+                    <p>My first app built with Lovable, an AI app builder. Volunteers used it to sign up for shifts at different stations during my church’s festival.</p>
+                    <ul class="pcard-points">
+                      <li>Shifts by station, shirt sizes, and a password-protected admin page</li>
+                      <li>I fixed a signup rule that wrongly blocked overlapping shifts at different stations</li>
+                    </ul>
+                  </div>
+                  <figure class="pcard-shot pcard-diagram">
+                    <svg viewBox="0 0 320 150" role="img" aria-labelledby="overlap-mini-label">
+                      <title id="overlap-mini-label">Diagram: a shift at Station A overlaps a shift at Station B during the handover.</title>
+                      <text x="12" y="38" class="d-label">Station A</text>
+                      <rect x="92" y="22" width="140" height="26" rx="5" class="d-shift d-a"/>
+                      <text x="12" y="88" class="d-label">Station B</text>
+                      <rect x="196" y="72" width="112" height="26" rx="5" class="d-shift d-b"/>
+                      <rect x="196" y="14" width="36" height="92" class="d-overlap"/>
+                      <text x="214" y="128" text-anchor="middle" class="d-note">handover</text>
+                    </svg>
+                    <figcaption>Diagram, not a screenshot.</figcaption>
+                  </figure>
+                </div>
+                <div class="pcard-actions">
+                  <a class="button button-dark" href="#/projects/church-festival">View project details<span class="visually-hidden">: Church Festival Signup</span></a>
+                  <a class="pcard-link" href="https://egypt-fest-shift-sign-up.lovable.app/" target="_blank" rel="noopener noreferrer">Visit live application<span class="visually-hidden">, an external website that opens in a new tab</span> <span aria-hidden="true">↗</span><span class="link-note">External site on lovable.app</span></a>
+                </div>
+              </article>
+
+              <article class="pcard pcard-site" role="group" aria-roledescription="slide" aria-label="3 of 3" data-project="reasons-to-hire-betsy">
+                <p class="pcard-num" aria-hidden="true">Project 3 of 3</p>
+                <div class="pcard-body">
+                  <div class="pcard-text">
+                    <p class="project-label">Ongoing · This website</p>
+                    <h2 tabindex="-1">ReasonsToHireBetsy v2.0</h2>
+                    <p>Applying what the first two projects taught me: investigate before changing code, write decisions down, and verify what AI produces.</p>
+                    <ul class="pcard-points pcard-status">
+                      <li><b>Live:</b> this recipe-box portfolio and the Magic 8-Ball</li>
+                      <li><b>Now:</b> documentation-first development with Claude Code</li>
+                      <li><b>Next:</b> agentic workflows (not built)</li>
+                    </ul>
+                  </div>
+                  <figure class="pcard-shot">
+                    <img src="/src/portfolio/photos/site-v2-recipe-box-640.jpg" srcset="/src/portfolio/photos/site-v2-recipe-box-640.jpg 640w, /src/portfolio/photos/site-v2-recipe-box-1000.jpg 1000w"
+                         sizes="(min-width: 1200px) 20rem, (min-width: 700px) 40vw, 85vw" width="640" height="400" decoding="async"
+                         alt="This website’s Home card, standing in Betsy’s open wooden recipe box: colored divider tabs for Home, Experience, Projects, AI &amp; Learning and About, above the card and her photo of mixing bowls and a kitchen scale.">
+                  </figure>
+                </div>
+                <div class="pcard-actions">
+                  <a class="button button-dark" href="#/projects/reasons-to-hire-betsy">View project details<span class="visually-hidden">: ReasonsToHireBetsy v2.0</span></a>
+                </div>
+              </article>
+            </div>
+
+            <div class="stack-controls">
+              <button type="button" class="stack-btn" data-step="-1"><span aria-hidden="true">←</span> Previous<span class="visually-hidden"> project</span></button>
+              <p class="stack-count">1 of 3</p>
+              <button type="button" class="stack-btn" data-step="1">Next<span class="visually-hidden"> project</span> <span aria-hidden="true">→</span></button>
+            </div>
+            <p class="stack-hint">Swipe the card, or use the arrow keys while you’re in the stack.</p>
+            <p class="visually-hidden" aria-live="polite" data-stack-live></p>
+          </section>
+
+          <figure class="card-photo" style="--ratio: 3 / 4; --mpos: 50% 25%">
+            <img src="/src/portfolio/photos/tres-leches-560.jpg"
+                 srcset="/src/portfolio/photos/tres-leches-560.jpg 560w, /src/portfolio/photos/tres-leches-800.jpg 800w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="560" height="911" loading="lazy" decoding="async"
+                 alt="A finished tres leches sponge cake in a glass baking dish, poked with a fork, below a steel bowl of milk mixture with a whisk.">
+          </figure>
+        </article>
+
+        <!-- ===== Project details (#/projects/<name>): a project's card pulled out of the box. The Projects tab stays current. ===== -->
+        <article class="card c-projects project-detail" data-card="projects/magic-8-ball" aria-labelledby="pd-8ball-title" hidden>
+          <p class="back-link"><a href="#/projects"><span aria-hidden="true">←</span> All projects</a></p>
+          <div class="card-head">
+            <p class="card-kicker">Projects · Featured</p>
+            <h1 id="pd-8ball-title" tabindex="-1">Magic 8-Ball</h1>
+            <p class="project-sub">Ask it whether Betsy is your next great hire, give it a shake, and a real API answers with a reason.</p>
+          </div>
+          <figure class="project-shot">
+            <img src="/src/portfolio/photos/magic-8-ball-2025-800.jpg" srcset="/src/portfolio/photos/magic-8-ball-2025-800.jpg 800w, /src/portfolio/photos/magic-8-ball-2025-1200.jpg 1200w"
+                 sizes="(min-width: 960px) 40rem, 92vw" width="800" height="486" loading="lazy" decoding="async"
+                 alt="The first Magic 8-Ball site: a cartoon of Betsy holding a Magic 8-Ball between two jumping dogs, the question “Is Betsy your next great hire?”, a “Shake the Magic 8-Ball” button and the answer “1000% yes.”">
+            <figcaption>The first version, April 2025.</figcaption>
+          </figure>
+          <h2>Why I built it</h2>
+          <p>It started as an experiment. I wanted a portfolio that showed my personality as well as my experience, so I built it around a Magic 8-Ball. The ball was the fun part. The real work was everything behind it.</p>
+          <h2>How it works</h2>
+          <dl class="glance project-facts">
+            <div><dt>Frontend</dt><dd>React and TypeScript, built with Vite and hosted on Vercel. Each shake shows a playful answer, then asks the API for a reason.</dd></div>
+            <div><dt>API</dt><dd>Spring Boot on Java 21, deployed to Render with Docker. <code>GET /api/reasons/random</code> returns one approved reason, picked at random.</dd></div>
+            <div><dt>Data</dt><dd>PostgreSQL, with the schema managed by Flyway migrations.</dd></div>
+            <div><dt>Fallback</dt><dd>Since the 2026 update, the site shows a local reason if the API is slow or down.</dd></div>
+          </dl>
+          <h2>What it taught me</h2>
+          <p>Getting the pieces to talk to each other in production took longer than writing any one of them. The commits from those first ten days are mostly about integration: CORS rules so the deployed frontend could call the API from Vercel and the custom domain, a different API address for each environment, a database migration that needed a manual repair, and getting Maven to build on Render.</p>
+          <h2>What I’d do differently today</h2>
+          <ul class="detail-list">
+            <li>Agree on the API contract first. The API sends the reason text as <code>reason</code>, but the frontend reads <code>title</code>.</li>
+            <li>Lock down the write endpoints before deploying anything.</li>
+            <li>Plan for the API being slow or unavailable from the start.</li>
+            <li>Add automated tests.</li>
+          </ul>
+          <h2>Play it</h2>
+          <p>The Magic 8-Ball keeps its own page, its original look and its personality. It used to be the whole website; now it’s one project in the portfolio.</p>
+          <div class="project-links">
+            <a class="button button-dark" href="/apps/magic-8-ball/">Play Magic 8-Ball</a>
+            <a class="pcard-link" href="#/projects"><span aria-hidden="true">←</span> All projects</a>
+          </div>
+          <figure class="card-photo" style="--ratio: 3 / 4; --mpos: 50% 25%">
+            <img src="/src/portfolio/photos/tres-leches-560.jpg" srcset="/src/portfolio/photos/tres-leches-560.jpg 560w, /src/portfolio/photos/tres-leches-800.jpg 800w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="560" height="911" loading="lazy" decoding="async" alt="">
+          </figure>
+        </article>
+
+        <article class="card c-projects project-detail" data-card="projects/church-festival" aria-labelledby="pd-festival-title" hidden>
+          <p class="back-link"><a href="#/projects"><span aria-hidden="true">←</span> All projects</a></p>
+          <div class="card-head">
+            <p class="card-kicker">Projects · Built with Lovable</p>
+            <h1 id="pd-festival-title" tabindex="-1">Church Festival Signup</h1>
+            <p class="project-sub">My first app built with Lovable, an AI-powered low-code app builder.</p>
+          </div>
+          <p class="detail-stat"><strong>300+</strong> people used it, including visitors from other countries, such as Egypt. The church promoted it to encourage volunteers to sign up for festival shifts.</p>
+          <h2>Why I built it</h2>
+          <p>I wanted to see how quickly I could build a useful application with AI-generated UI and code. My church’s festival needed volunteers at different stations, so I built the signup for it.</p>
+          <h2>What it does</h2>
+          <ul class="detail-list">
+            <li>Volunteers register for shifts, with different stations and shift schedules.</li>
+            <li>Volunteers review the shifts they’ve signed up for, and families can review their shift registrations.</li>
+            <li>It collects shirt sizes, and later I added shirt inventory tracking.</li>
+            <li>A password-protected admin page is meant to keep registrants’ information private.</li>
+          </ul>
+          <h2>The problem that mattered</h2>
+          <p>Some volunteers couldn’t sign up for more than one shift, because the app rejected any shifts whose times overlapped. But some overlaps were intentional: one shift ends while the next one starts, at the handover between stations.</p>
+          <figure class="detail-diagram">
+            <svg viewBox="0 0 320 150" role="img" aria-labelledby="overlap-label">
+              <title id="overlap-label">Diagram: a shift at Station A overlaps a shift at Station B during the handover. The original rule blocked this signup.</title>
+              <text x="12" y="38" class="d-label">Station A</text>
+              <rect x="92" y="22" width="140" height="26" rx="5" class="d-shift d-a"/>
+              <text x="12" y="88" class="d-label">Station B</text>
+              <rect x="196" y="72" width="112" height="26" rx="5" class="d-shift d-b"/>
+              <rect x="196" y="14" width="36" height="92" class="d-overlap"/>
+              <text x="214" y="128" text-anchor="middle" class="d-note">handover</text>
+            </svg>
+            <figcaption>Diagram, not a screenshot. Overlapping shifts at different stations should be allowed.</figcaption>
+          </figure>
+          <p>I investigated the signup logic myself and fixed it, so volunteers can register for overlapping shifts when the shifts are at different stations. The first generated version followed a sensible-sounding rule. The real requirement only became clear once people tried to use it.</p>
+          <h2>What I learned</h2>
+          <p>AI tools got me to a working application quickly. Real users then found requirements and edge cases the first version didn’t handle. Now I judge AI-generated UI and functionality by how people actually use it, not by how polished the first result looks.</p>
+          <h2>What’s next</h2>
+          <p>The biggest improvement identified after the festival: automated text-message reminders before each volunteer’s shift. <strong>It’s planned, not built.</strong></p>
+          <div class="project-links">
+            <a class="button button-dark" href="https://egypt-fest-shift-sign-up.lovable.app/" target="_blank" rel="noopener noreferrer">Visit live application<span class="visually-hidden">, an external website that opens in a new tab</span> <span aria-hidden="true">↗</span></a>
+            <a class="pcard-link" href="#/projects"><span aria-hidden="true">←</span> All projects</a>
+          </div>
+          <p class="external-note">External site: egypt-fest-shift-sign-up.lovable.app, opens in a new tab.</p>
+          <figure class="card-photo" style="--ratio: 3 / 4; --mpos: 50% 25%">
+            <img src="/src/portfolio/photos/tres-leches-560.jpg" srcset="/src/portfolio/photos/tres-leches-560.jpg 560w, /src/portfolio/photos/tres-leches-800.jpg 800w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="560" height="911" loading="lazy" decoding="async" alt="">
+          </figure>
+        </article>
+
+        <article class="card c-projects project-detail" data-card="projects/reasons-to-hire-betsy" aria-labelledby="pd-site-title" hidden>
+          <p class="back-link"><a href="#/projects"><span aria-hidden="true">←</span> All projects</a></p>
+          <div class="card-head">
+            <p class="card-kicker">Projects · Ongoing</p>
+            <h1 id="pd-site-title" tabindex="-1">ReasonsToHireBetsy v2.0</h1>
+            <p class="project-sub">Redesigning my portfolio as a documented engineering project, with Claude Code as a development partner.</p>
+          </div>
+          <h2>How I’m working on it</h2>
+          <ul class="detail-list">
+            <li><b>Investigate first.</b> Before changing any code, I had Claude Code assess the existing architecture and record what it found, including the 8-Ball’s known issues.</li>
+            <li><b>Write it down.</b> An agent guide (<code>CLAUDE.md</code>), a design document (<code>DESIGN.md</code>) and dated research notes live in the repository, so people and coding agents work from the same context.</li>
+            <li><b>Decisions stay mine.</b> Claude Code investigates, proposes and builds prototypes. I approve the decisions, and approved ones go into the design decision log.</li>
+            <li><b>Accessibility from the start.</b> The target is WCAG 2.2 AA, and every prototype is checked at phone and desktop widths.</li>
+            <li><b>My own photography.</b> The visual identity is built around photos from my kitchen, like the one beside this card.</li>
+          </ul>
+          <h2>Status</h2>
+          <div class="status">
+            <div>
+              <h3>Live now</h3>
+              <ul>
+                <li>This recipe-box portfolio: HTML, CSS and JavaScript, built with Vite and hosted on Vercel</li>
+                <li>The Magic 8-Ball on its own page, in React and TypeScript, with keyboard support and fallback reasons</li>
+                <li>Spring Boot API and PostgreSQL on Render</li>
+              </ul>
+            </div>
+            <div>
+              <h3>In progress</h3>
+              <ul>
+                <li>Documentation-first workflow with Claude Code</li>
+                <li>Accessibility and responsive layouts</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Ideas, not built</h3>
+              <ul>
+                <li>Agentic workflows for parts of the development process</li>
+                <li>Multi-agent systems, only once there’s a real use case for one</li>
+              </ul>
+            </div>
+          </div>
+          <h2>Lessons carried over</h2>
+          <p>From the 8-Ball: agree on contracts and plan for failure before you deploy. From the festival signup: real use shows requirements a first draft misses. Here, that means investigating before building and verifying what AI produces against the real system.</p>
+          <div class="project-links">
+            <a class="pcard-link" href="#/projects"><span aria-hidden="true">←</span> All projects</a>
+          </div>
+          <figure class="card-photo" style="--ratio: 3 / 4; --mpos: 50% 25%">
+            <img src="/src/portfolio/photos/tres-leches-560.jpg" srcset="/src/portfolio/photos/tres-leches-560.jpg 560w, /src/portfolio/photos/tres-leches-800.jpg 800w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="560" height="911" loading="lazy" decoding="async" alt="">
+          </figure>
+        </article>
+
+        <!-- ===== AI & Learning ===== -->
+        <article class="card c-ai" data-card="ai" aria-labelledby="ai-title" hidden>
+          <div class="card-head">
+            <p class="card-kicker">AI &amp; Learning</p>
+            <h1 id="ai-title" tabindex="-1">AI-assisted engineering and agentic workflows</h1>
+          </div>
+          <p class="pull">AI output is a hypothesis until the real system verifies it.</p>
+          <h2>At work</h2>
+          <p>At Sinch I lead AI-assisted engineering initiatives using GitHub Copilot and Claude, covering UI development, repository guidance, team workflows and engineering automation opportunities.</p>
+          <h2>What I’m exploring</h2>
+          <p>Agentic workflows, and how coding agents can work from the same trusted context as the people on the team. This site’s v2 redesign is planned that way, with an agent guide, a design document and dated research notes kept in the repository.</p>
+          <figure class="card-photo" style="--ratio: 3 / 4; --mpos: 50% 50%">
+            <img src="/src/portfolio/photos/fork-cake-700.jpg"
+                 srcset="/src/portfolio/photos/fork-cake-700.jpg 700w, /src/portfolio/photos/fork-cake-1100.jpg 1100w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="700" height="933" loading="lazy" decoding="async"
+                 alt="A baked tres leches sponge in a glass baking dish, its whole surface poked with neat rows of fork holes.">
+          </figure>
+        </article>
+
+        <!-- ===== About ===== -->
+        <article class="card c-about" data-card="about" aria-labelledby="about-title" hidden>
+          <div class="card-head">
+            <p class="card-kicker">About</p>
+            <h1 id="about-title" tabindex="-1">Engineering is a big part of me. It isn’t all of me.</h1>
+          </div>
+          <p class="statement">I zoom out before I zoom in.</p>
+          <p>Before I start changing code, I want to understand the user, the system around the change, and how we will know the solution is actually working.</p>
+          <p>Outside work I cook and bake for the people around me, from weeknight meal prep to batches of tamales and bake-sale flan and tres leches. It’s the same habit: prepare, work in steps, and check as you go.</p>
+          <figure class="card-photo" style="--ratio: 4 / 5; --mpos: 50% 30%">
+            <img src="/src/portfolio/photos/behind-sale-table-640.jpg"
+                 srcset="/src/portfolio/photos/behind-sale-table-640.jpg 640w, /src/portfolio/photos/behind-sale-table-900.jpg 900w"
+                 sizes="(min-width: 1100px) 20rem, 100vw" width="640" height="772" loading="lazy" decoding="async"
+                 alt="Betsy smiling behind her bake-sale table of homemade flan and tres leches.">
+          </figure>
+        </article>
+      </main>
+    </div>
+    <div class="box-front" aria-hidden="true"><span class="box-label">Betsy’s Recipes</span></div>
+  </div>
+
+  <footer class="site-footer" id="contact" tabindex="-1">
+    <h2>Contact</h2>
+    <p>I’m exploring my next software engineering opportunity. Email is the quickest way to reach me.</p>
+    <ul class="footer-links">
+      <li><a href="mailto:betsydelacru@gmail.com">betsydelacru@gmail.com</a></li>
+      <li><a href="https://github.com/bdelacru" target="_blank" rel="noreferrer">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+      <li><a href="/Betsy_De_La_Cruz_Resume_.pdf" target="_blank" rel="noreferrer">Résumé (PDF)<span class="visually-hidden">, opens in a new tab</span></a></li>
+    </ul>
+    <p class="footer-meta">The recipe box and the photos are my own.
+      <button type="button" class="link-button" data-close>Close the recipe box</button></p>
+  </footer>
+</div>
+
+<script type="module" src="/src/portfolio/portfolio.js"></script>
+</body>
 </html>

@@ -1,8 +1,10 @@
 # 🎡 Reasons to Hire Betsy
 
-Welcome to **Reasons to Hire Betsy**, a whimsical full-stack app built to showcase Betsy's experience, personality, and technical strengths—all through the fun of a Magic 8-Ball interaction.
+Welcome to **Reasons to Hire Betsy**, Betsy De La Cruz's software engineering portfolio. Since v2.0 the homepage is Betsy's own wooden recipe box: open it, and her experience, projects, AI work and story are the index cards inside. The original Magic 8-Ball lives on as one of the projects, with its own page at `/apps/magic-8-ball/`.
 
-![![alt text](Website example))](./frontend/src/assets/websiteSample.png)
+![The portfolio's Home card, standing in Betsy's open wooden recipe box](./frontend/src/portfolio/photos/site-v2-recipe-box-1000.jpg)
+
+How v2.0 was designed and built: [DESIGN.md](DESIGN.md), [docs/decisions/](docs/decisions/) and [docs/research/](docs/research/).
 
 🔗 **Live Site**: [https://reasonstohirebetsy.com](https://reasonstohirebetsy.com)  
 📘 **Swagger Docs**: [https://reasonstohirebetsy.onrender.com/swagger-ui/index.html](https://reasonstohirebetsy.onrender.com/swagger-ui/index.html)
@@ -11,11 +13,10 @@ Welcome to **Reasons to Hire Betsy**, a whimsical full-stack app built to showca
 
 ## 🚀 Tech Stack
 
-### Frontend (Vite + React + TypeScript + TailwindCSS)
-- Vite for fast builds and hot reloads
-- TailwindCSS for sleek utility-based styling
-- Responsive, animated 8-ball UI with affirmations
-- Magic 8-ball styled cartoon illustration of Betsy and her dogs
+### Frontend (Vite multi-page build)
+- `/`: the recipe-box portfolio, in plain HTML, CSS and JavaScript (`frontend/index.html`, `frontend/src/portfolio/`). Hash routes (`#/projects`, `#/projects/magic-8-ball`, …) need no server rewrites.
+- `/apps/magic-8-ball/`: the standalone Magic 8-Ball, in React and TypeScript (`frontend/apps/`, `frontend/src/apps/magic-8-ball/`), with the original cartoon illustration of Betsy and her dogs and local fallback reasons
+- Vitest tests for the 8-Ball's reason handling (`npm test`)
 - Environment-based API switching (local vs production)
 
 ### Backend (Spring Boot)
@@ -61,6 +62,15 @@ cp .env.local.template .env.local  # set VITE_API_URL=http://localhost:8080
 npm install
 npm run dev
 ```
+
+The dev server prints its URL (normally `http://localhost:5173`). It serves:
+- `/`: the recipe-box portfolio
+- `/apps/magic-8-ball/`: the standalone Magic 8-Ball
+- `/explorations/v2-recipe-index/` and `/explorations/v2-recipe-box/`: archived design prototypes (development only, never in the production build; run each folder's `make-photos.ps1` first, which needs the git-ignored originals)
+
+Other commands, all in `frontend/`: `npm test` (Vitest), `npm run lint`, `npm run build` (output in `dist/`), `npm run preview` (serves the build locally).
+
+The portfolio's photos are committed, metadata-free web copies in `frontend/src/portfolio/photos/`. Betsy's original photos are never committed.
 
 ---
 

@@ -1,0 +1,376 @@
+/* The recipe-box portfolio (the homepage). Moved from explorations/v2-recipe-box/ when the design was approved;
+   see docs/decisions/0002-recipe-box-portfolio-homepage.md. Photos are in ./photos (metadata-free web copies). */
+:root {
+  --table: #15120f;
+  --on-table: #fbf7f0;
+  --on-table-muted: #d9cfc0;
+  --paper: #fdfaf3;
+  --paper-shade: #ece4d4;
+  --ink: #1f1a15;
+  --ink-muted: #574d43;
+  --ruling: #d3dbe6;
+  --butter: #f4c24f;
+  --butter-ink: #1d1608;
+  --wood: #b98a4e;        /* sampled from the box photos */
+  --wood-dark: #7c5a2e;
+  --wood-inside: #5d4322;
+  --metal: #2b2620;       /* the dark brackets and latch */
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Figtree', system-ui, 'Segoe UI', sans-serif;
+  --hand: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+}
+.c-home       { --c: #d99a0b; --tint: #f9e3a3; }
+.c-experience { --c: #c4452f; --tint: #f5cdc2; }
+.c-projects   { --c: #3d7a4c; --tint: #cfe4c8; }
+.c-ai         { --c: #2e5fa6; --tint: #cddbf1; }
+.c-about      { --c: #a8406a; --tint: #f1cadb; }
+
+* { box-sizing: border-box; }
+html { background: var(--table); }
+body { margin: 0; background: var(--table); color: var(--on-table); font: 1.0625rem/1.6 var(--sans); }
+a { color: inherit; }
+img { max-width: 100%; }
+:focus-visible { outline: 3px solid var(--on-table); outline-offset: 3px; border-radius: 4px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip-link { position: fixed; left: 1rem; top: -4rem; z-index: 50; background: var(--butter); color: var(--butter-ink); padding: .6rem 1rem; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.skip-link:focus { top: 1rem; }
+
+/* ---------- Which view shows: the closed box (landing) or the open box (portfolio) ---------- */
+/* Without JavaScript there's no data-box: the landing is skipped and the portfolio shows every card. */
+.landing { display: none; }
+[data-box="closed"] .landing, [data-box="opening"] .landing { display: flex; }
+[data-box="closed"] .portfolio { display: none; }
+[data-box="closed"] body, [data-box="opening"] body { overflow: hidden; }
+
+/* =====================================================================================================
+   LANDING: the closed recipe box on the table
+   ===================================================================================================== */
+.landing { position: fixed; inset: 0; z-index: 30; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(.5rem, 2vh, 1.5rem); padding: 1rem var(--gutter); overflow: hidden; text-align: center;
+  /* A pool of warm light on the dark table */
+  background: radial-gradient(ellipse 60% 50% at 50% 62%, #2c241b 0, var(--table) 70%); }
+.landing-head h1 { margin: 0; font: 600 clamp(2rem, 1.5rem + 2vw, 2.9rem)/1 var(--hand); }
+.landing-head p { margin: .35rem 0 0; color: var(--on-table-muted); font-size: .9375rem; }
+
+/* The button is the box itself plus its visible label, so the whole object is the target. */
+.box-button { display: flex; flex-direction: column; align-items: center; gap: clamp(.5rem, 2vh, 1.25rem); padding: 0;
+  border: 0; background: none; color: inherit; font: inherit; cursor: pointer; border-radius: 1rem; }
+.box-button:focus-visible { outline: none; }
+.box-button:focus-visible .open-label { outline: 3px solid var(--on-table); outline-offset: 4px; }
+.open-label { display: inline-flex; align-items: center; gap: .55rem; min-height: 48px; padding: .65rem 1.5rem; border-radius: 999px;
+  background: var(--butter); color: var(--butter-ink); font-weight: 700; }
+.open-label svg { width: 1.1rem; height: 1.1rem; }
+.box-button:hover .open-label { background: #ffd877; }
+.landing-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .25rem 1.5rem; margin: 0; padding: 0; list-style: none; font-size: .9375rem; }
+.landing-links a { display: inline-block; padding: .4rem 0; color: var(--on-table); }
+.skip-anim { position: fixed; z-index: 40; right: 1rem; bottom: 1rem; min-height: 44px; padding: .5rem 1.1rem; border: 1.5px solid var(--on-table);
+  border-radius: 999px; background: var(--table); color: var(--on-table); font: 600 .9375rem var(--sans); cursor: pointer; }
+.skip-anim[hidden] { display: none; }
+
+/* ---------- The 3D box. Every length is in --u, a hundredth of the box's width. ----------
+   Real proportions: about 100 wide, 60 deep, lid front 24 tall, base front 36 tall. */
+.scene { --bw: min(32rem, 80vw, 46svh); --u: calc(var(--bw) / 100);
+  --W: calc(var(--u) * 100); --D: calc(var(--u) * 60); --HL: calc(var(--u) * 23.8); --HB: calc(var(--u) * 35.6);
+  position: relative; width: var(--W); height: calc(var(--u) * 94); margin-bottom: calc(var(--u) * 5); perspective: calc(var(--u) * 330); perspective-origin: 50% 0%; }
+.scene, .scene span { display: block; }
+.shadow { position: absolute; left: -8%; right: -8%; bottom: calc(var(--u) * -6); height: calc(var(--u) * 16);
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .7), rgba(0, 0, 0, 0)); }
+.box3d { position: absolute; left: 0; bottom: 0; width: var(--W); height: calc(var(--HL) + var(--HB));
+  transform-style: preserve-3d; transform: translateZ(calc(var(--D) / -2)) rotateX(-16deg); }
+.face { position: absolute; backface-visibility: hidden; }
+.tex { background-size: 100% 100%; background-color: var(--wood); }
+/* Base */
+.base-front { left: 0; top: var(--HL); width: var(--W); height: var(--HB); transform: translateZ(calc(var(--D) / 2));
+  background-image: url(photos/base-front.jpg); box-shadow: inset 0 calc(var(--u) * .6) 0 rgba(255, 235, 200, .25); }
+.base-back { left: 0; top: var(--HL); width: var(--W); height: var(--HB); transform: translateZ(calc(var(--D) / -2));
+  background: linear-gradient(var(--wood-inside), #3f2d16); }
+.base-side { top: var(--HL); left: calc((var(--W) - var(--D)) / 2); width: var(--D); height: var(--HB); backface-visibility: visible;
+  background: linear-gradient(90deg, #6c4d26, #8a6434); }
+.base-left { transform: rotateY(-90deg) translateZ(calc(var(--W) / 2)); }
+.base-right { transform: rotateY(90deg) translateZ(calc(var(--W) / 2)); }
+/* The label: a paper label on the front of the base, written by hand */
+.box-label { position: absolute; left: 9%; top: 34%; padding: calc(var(--u) * 1) calc(var(--u) * 3.2) calc(var(--u) * .6);
+  background: #f6efdf; color: #3b2a14; border-radius: calc(var(--u) * .5); transform: rotate(-2.5deg);
+  font: 600 calc(var(--u) * 6.2)/1 var(--hand); white-space: nowrap;
+  box-shadow: 0 calc(var(--u) * .3) calc(var(--u) * .8) rgba(40, 25, 10, .45), inset 0 0 0 calc(var(--u) * .4) #e2d5b8; }
+
+/* The cards inside: five index dividers (one per portfolio page) and two recipe cards, standing at different depths */
+.inside { position: absolute; inset: 0; transform-style: preserve-3d; }
+.divider { --z: 0; --lift: 0; position: absolute; left: 3%; width: 94%; top: calc(var(--HL) - var(--u) * 3); height: calc(var(--HB) - var(--u) * 2);
+  background: var(--paper); border-radius: calc(var(--u) * .8) calc(var(--u) * .8) 0 0;
+  box-shadow: 0 calc(var(--u) * -.4) calc(var(--u) * 1.2) rgba(0, 0, 0, .25);
+  transform: translateZ(calc(var(--u) * var(--z))) translateY(calc(var(--u) * var(--lift) * -1)); }
+.divider-tab { position: absolute; bottom: 100%; left: var(--x); padding: calc(var(--u) * .9) calc(var(--u) * 2.4) calc(var(--u) * .3);
+  border-radius: calc(var(--u) * 1.2) calc(var(--u) * 1.2) 0 0; background: var(--tint); color: var(--ink);
+  font: 700 calc(var(--u) * 3.1)/1.1 var(--sans); white-space: nowrap; }
+.divider.c-home { background: var(--tint); }
+.recipe-card { background: #fffdf8 repeating-linear-gradient(transparent 0 calc(var(--u) * 3.6), var(--ruling) calc(var(--u) * 3.6) calc(var(--u) * 3.8));
+  border-radius: calc(var(--u) * .5); }
+/* Lid: hinged along its back bottom edge */
+.lid { position: absolute; left: 0; top: 0; width: var(--W); height: var(--HL); transform-style: preserve-3d;
+  transform-origin: 50% 100% calc(var(--D) / -2); }
+.lid-front { inset: 0; transform: translateZ(calc(var(--D) / 2)); background-image: url(photos/lid-front.jpg); }
+.lid-back { inset: 0; transform: translateZ(calc(var(--D) / -2)) rotateY(180deg); background: var(--wood-dark); }
+.lid-side { top: 0; left: calc((var(--W) - var(--D)) / 2); width: var(--D); height: var(--HL); backface-visibility: visible;
+  background: linear-gradient(90deg, #7a5a30, #9c7442); }
+.lid-left { transform: rotateY(-90deg) translateZ(calc(var(--W) / 2)); }
+.lid-right { transform: rotateY(90deg) translateZ(calc(var(--W) / 2)); }
+.lid-top { left: 0; top: calc(var(--D) / -2); width: var(--W); height: var(--D); transform: rotateX(90deg);
+  background-image: url(photos/lid-top.jpg); }
+.lid-inside { left: 0; top: calc(var(--D) / -2); width: var(--W); height: var(--D);
+  transform: translateY(calc(var(--u) * 2)) rotateX(-90deg) scaleY(-1); background-image: url(photos/lid-inside.jpg); filter: brightness(.92); }
+/* The hasp: a metal loop hinged on the lid, hanging over the latch on the base, a little crooked like the real one */
+.hasp { position: absolute; left: 47.5%; top: 86%; width: calc(var(--u) * 12); height: calc(var(--u) * 17);
+  transform-origin: 50% calc(var(--u) * 1.5); transform: rotate(-9deg); overflow: visible; }
+
+/* Hover or focus: the lid lifts a little, an invitation to open it */
+@media (prefers-reduced-motion: no-preference) {
+  .lid, .hasp, .divider, .scene, .landing-head, .landing-links, .open-label { transition: transform .5s cubic-bezier(.2, .7, .2, 1), opacity .5s; }
+  [data-box="closed"] .box-button:hover .lid, [data-box="closed"] .box-button:focus-visible .lid { transform: rotateX(7deg); }
+  [data-box="closed"] .box-button:hover .hasp, [data-box="closed"] .box-button:focus-visible .hasp { transform: rotate(-3deg) rotateX(-25deg); }
+}
+
+/* ---------- Opening, in stages set by the script: unlatch, lid, cards, then into the box ---------- */
+[data-stage~="unlatch"] .hasp { transform: rotate(0deg) rotateX(-170deg); transition-duration: .35s; }
+[data-stage~="lid"] .lid { transform: rotateX(112deg); transition: transform .95s cubic-bezier(.45, 0, .25, 1); }
+[data-stage~="cards"] .divider { --lift: var(--rise, 8); transition: transform .55s cubic-bezier(.2, .7, .2, 1) calc(var(--i, 0) * 60ms); }
+[data-stage~="zoom"] .scene { transform: translateY(18%) scale(2.6); opacity: 0; transition: transform .75s cubic-bezier(.5, 0, .3, 1), opacity .3s .15s; }
+[data-stage~="lid"] .landing-head, [data-stage~="lid"] .landing-links, [data-stage~="lid"] .open-label { opacity: 0; transition-duration: .3s; }
+[data-stage~="zoom"] .landing { pointer-events: none; }
+[data-stage~="zoom"] .landing { background: transparent; transition: background .5s .25s; }
+
+/* =====================================================================================================
+   PORTFOLIO: the open box. The lid stands open at the top, the index cards stand in the box, and the
+   box's front edge stays at the bottom of the screen while the cards scroll behind it.
+   ===================================================================================================== */
+.portfolio { min-height: 100vh; min-height: 100svh; padding: 0 var(--gutter) 2rem; }
+.portfolio > * { max-width: 72rem; margin-inline: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-stage~="zoom"] .portfolio { animation: portfolio-in .8s cubic-bezier(.2, .7, .2, 1) .2s both; }
+}
+@keyframes portfolio-in { from { opacity: 0; transform: translateY(14vh) scale(.94); } to { opacity: 1; transform: none; } }
+
+.site-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.5rem; padding: 1.25rem 0 1rem; }
+.wordmark { display: block; text-decoration: none; }
+.wordmark-name { display: block; font: 600 clamp(1.8rem, 1.4rem + 1vw, 2.3rem)/1 var(--hand); }
+.wordmark-role { display: block; margin-top: .3rem; font-size: .9375rem; color: var(--on-table-muted); }
+.header-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.pill { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .5rem 1.2rem; border-radius: 999px; font-weight: 600; text-decoration: none; }
+.pill svg { width: 1.05rem; height: 1.05rem; }
+.pill-outline { border: 1.5px solid var(--on-table); }
+.pill-outline:hover { background: var(--on-table); color: var(--ink); }
+.pill-butter { background: var(--butter); color: var(--butter-ink); }
+.pill-butter:hover { background: #ffd877; }
+
+/* The open box: wooden walls on either side of the cards */
+.open-box { --wall: clamp(.45rem, 1.4vw, 1rem); position: relative; padding: 0 var(--wall); overflow-x: clip;
+  border-radius: .6rem .6rem 0 0;
+  background: linear-gradient(90deg, #8a6434, var(--wood) var(--wall), var(--wood-inside) calc(var(--wall) + 1px), #3f2d16 50%, var(--wood-inside) calc(100% - var(--wall) - 1px), var(--wood) calc(100% - var(--wall)), #8a6434); }
+/* The open lid, standing up behind the cards: the inside of Betsy's lid */
+.lid-open { height: clamp(3.25rem, 9vw, 7.5rem); margin: 0 calc(var(--wall) * -1); border-radius: .6rem .6rem 0 0;
+  background: url(photos/lid-inside.jpg) 50% 18% / 100% auto, var(--wood); box-shadow: inset 0 -1.5rem 1.5rem -1rem rgba(0, 0, 0, .55); }
+
+/* Tabs: real links, one per card; they read as the dividers' tabs */
+.index { position: relative; margin-top: clamp(-2.25rem, -4vw, -1.4rem); filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .45)) drop-shadow(0 1px 1px rgba(0, 0, 0, .35)); }
+.tabs ul { position: relative; list-style: none; margin: 0; padding: .5rem .25rem 0; display: flex; align-items: flex-end; gap: .3rem;
+  overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.tabs ul::-webkit-scrollbar { display: none; }
+.tabs.more-right ul { mask-image: linear-gradient(90deg, #000 calc(100% - 3rem), transparent); }
+.tabs.more-left ul { mask-image: linear-gradient(90deg, transparent, #000 3rem); }
+.tabs.more-left.more-right ul { mask-image: linear-gradient(90deg, transparent, #000 3rem, #000 calc(100% - 3rem), transparent); }
+.tabs li { flex: 0 0 auto; }
+.tab { position: relative; display: flex; align-items: center; min-height: 2.6rem; padding: .45rem 1.15rem .5rem;
+  border-radius: .7rem .7rem 0 0; background: var(--tint); color: var(--ink);
+  font-weight: 600; font-size: .9688rem; line-height: 1.15; text-decoration: none; white-space: nowrap;
+  box-shadow: inset 0 -.45rem .5rem -.4rem rgba(0, 0, 0, .18); }
+.tab:not([aria-current]):hover { min-height: 2.85rem; }
+.tab:focus-visible { outline: 3px solid var(--ink); outline-offset: -6px; border-radius: .7rem .7rem 0 0; }
+.tab[aria-current="page"] { min-height: 3.05rem; padding-bottom: .85rem; background: var(--paper); box-shadow: inset 0 5px 0 var(--c); font-weight: 700; z-index: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .tab { transition: min-height .22s cubic-bezier(.2, .7, .2, 1), background-color .22s; }
+}
+
+/* Cards. Two card tops peek out above the front card: the rest of the index standing behind it. */
+.cards { display: grid; position: relative; isolation: isolate; }
+.cards::before, .cards::after { content: ""; position: absolute; z-index: -1; height: 3rem; border-radius: .5rem .5rem 0 0; background: var(--paper-shade); }
+.cards::before { left: .6rem; right: .6rem; top: -.45rem; }
+.cards::after { left: 1.3rem; right: 1.3rem; top: -.85rem; background: #d9cfbd; }
+.card { grid-area: 1 / 1; min-width: 0; background: var(--paper); color: var(--ink);
+  border-radius: 0 .5rem 0 0; padding: clamp(1.25rem, 3.5vw, 3rem) clamp(1.25rem, 4vw, 3.25rem) clamp(2rem, 4vw, 3.25rem); }
+.card[hidden] { display: none; }
+.card :focus-visible { outline-color: var(--ink); }
+.card a { text-decoration-thickness: 1px; text-underline-offset: .2em; }
+.card a:hover { text-decoration-thickness: 2px; }
+.card-head { margin-bottom: 1.75rem; }
+.card-kicker { margin: 0 0 .35rem; font-size: .875rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
+.card h1 { margin: 0; font: 600 clamp(2rem, 1.5rem + 2vw, 3rem)/1.08 var(--serif); letter-spacing: -.01em; }
+.card h1:focus { outline: none; }
+.card h1:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+.card h2 { margin: 2rem 0 .6rem; font: 600 1.35rem/1.25 var(--serif); }
+.card p { margin: 0 0 1rem; max-width: 40rem; }
+.muted { color: var(--ink-muted); }
+
+/* Wide screens: each card's photo sits beside the text, like a snapshot kept with the card. */
+@media (min-width: 1100px) {
+  .card { display: grid; grid-template-columns: minmax(0, 1fr) clamp(15rem, 22vw, 20rem); column-gap: clamp(2rem, 3vw, 3.5rem); align-content: start; }
+  .card > * { grid-column: 1; }
+  .card > .card-photo { grid-column: 2; grid-row: 1 / span 40; align-self: start; position: sticky; top: 1.5rem; }
+}
+.card-photo { margin: 2rem 0 0; }
+.card-photo[hidden] { display: none; }
+.card-photo img { display: block; width: 100%; height: auto; aspect-ratio: var(--ratio, 4 / 3); object-fit: cover; object-position: var(--mpos, 50% 50%);
+  border: .45rem solid #fff; box-shadow: 0 2px 4px rgba(31, 26, 21, .2), 0 8px 18px rgba(31, 26, 21, .14); }
+@media (min-width: 1100px) { .card-photo img { transform: rotate(1.2deg); } .c-experience .card-photo img, .c-ai .card-photo img { transform: rotate(-1deg); } }
+.card-photo figcaption { margin-top: .6rem; font: 600 1.45rem/1.1 var(--hand); color: #8a4b00; transform: rotate(-1.5deg); }
+
+/* Home */
+.c-home h1 { font-size: clamp(2.3rem, 1.6rem + 3vw, 3.9rem); }
+.c-home h1 .highlight { color: #9a5b00; }
+.identity { font-weight: 600; }
+.identity span { font-weight: 500; color: var(--ink-muted); }
+.lede { font-size: clamp(1.0625rem, 1rem + .3vw, 1.2rem); }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem 1rem; margin: 1.75rem 0 2.25rem; }
+.button { display: inline-flex; align-items: center; gap: .55rem; min-height: 48px; padding: .65rem 1.45rem; border-radius: 999px; font-weight: 600; text-decoration: none !important; }
+.button svg { width: 1.1rem; height: 1.1rem; }
+.button-dark { background: var(--ink); color: var(--paper); }
+.button-dark:hover { background: #3a3129; }
+.button-line { border: 1.5px solid var(--ink); }
+.button-line:hover { background: var(--ink); color: var(--paper); }
+.glance { margin: 0; border-top: 1px solid var(--ruling); }
+.glance div { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; padding: .6rem 0; border-bottom: 1px solid var(--ruling); }
+.glance dt { font-weight: 600; color: var(--ink-muted); font-size: .9375rem; padding-top: .1rem; }
+.glance dd { margin: 0; }
+
+/* Experience */
+.roles { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ruling); }
+.role { display: grid; grid-template-columns: 10rem 1fr; gap: .5rem 1.5rem; padding: 1.25rem 0; border-bottom: 1px solid var(--ruling); }
+.role-dates { margin: 0; font-weight: 600; color: var(--ink-muted); font-size: .9375rem; padding-top: .25rem; }
+.role h2 { margin: 0; font-size: 1.3rem; }
+.role .title { margin: .1rem 0 .6rem; color: var(--ink-muted); }
+.role p:last-child { margin-bottom: 0; }
+.stack { font-size: .9375rem; color: var(--ink-muted); }
+
+/* Projects: a small stack of project cards taken out of the box and held, fanned a little.
+   --pos 0 is the card in front; 1 and 2 are behind it, fanned up and to the right. The script sets --pos. */
+.hand { margin: 2.5rem 0 0; padding: 1.25rem clamp(0rem, 2vw, 1.5rem) .5rem; }
+.recipe-stack { display: grid; container-type: inline-size; touch-action: pan-y; max-width: 46rem; padding: 0 2.2rem 0 0; transform: rotate(-.8deg); }
+.pcard { --pos: 0; grid-area: 1 / 1; position: relative; display: flex; flex-direction: column; min-width: 0;
+  padding: clamp(1.1rem, 2.6vw, 1.75rem); border-radius: .45rem; background: #fffdf8;
+  border-top: .35rem solid var(--tab-bg);
+  box-shadow: 0 1px 1px rgba(60, 40, 20, .2), 0 8px 18px rgba(60, 40, 20, .18);
+  transform-origin: 0 100%; z-index: calc(3 - var(--pos));
+  transform: translateX(var(--drag, 0px)) translate(calc(var(--pos) * .9rem), calc(var(--pos) * -.35rem)) rotate(calc(var(--pos) * 1.8deg)); }
+.pcard[data-pos="1"] { background: #f8f2e6; }
+.pcard[data-pos="2"] { background: #f2ead9; }
+.pcard:not([data-pos="0"]):not(.is-leaving) > * { visibility: hidden; }
+.pcard-8ball { --tab-bg: var(--ink); }
+.pcard-festival { --tab-bg: #8cbf86; }
+.pcard-site { --tab-bg: #e8c25d; }
+.pcard-num { margin: 0 0 .5rem !important; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+.pcard-body { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1.25rem 1.75rem; align-items: start; flex: 1; }
+.pcard-8ball .pcard-body { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+@container (max-width: 40rem) { .pcard-body, .pcard-8ball .pcard-body { grid-template-columns: minmax(0, 1fr); } }
+.card .pcard h2 { margin: 0 0 .6rem; font-size: clamp(1.5rem, 1.25rem + 1vw, 1.9rem); }
+.card .pcard-8ball h2 { font-size: clamp(1.8rem, 1.4rem + 1.5vw, 2.4rem); }
+.pcard h2:focus { outline: none; }
+.pcard h2:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.card .pcard p { margin-bottom: .75rem; }
+.pcard-points { margin: .25rem 0 0; padding-left: 1.1rem; font-size: .9688rem; }
+.pcard-points li { margin-bottom: .3rem; }
+.pcard-shot { margin: 0; }
+.pcard-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--ruling); border-radius: .35rem; }
+.pcard-shot figcaption { margin-top: .35rem; font-size: .8125rem; color: var(--ink-muted); }
+.card .pcard-stat { margin-bottom: .5rem; font-weight: 600; color: var(--ink-muted); }
+.pcard-stat strong { font: 600 clamp(2.4rem, 2rem + 2vw, 3.2rem)/1 var(--serif); color: var(--c); margin-right: .25rem; }
+.pcard-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1.25rem; }
+.pcard-link { display: inline-block; font-weight: 600; }
+.link-note { display: inline-block; width: 100%; font-size: .8125rem; font-weight: 500; color: var(--ink-muted); }
+.project-label { margin: 0 0 .3rem !important; font-size: .9375rem; font-weight: 600; color: var(--ink-muted); }
+.pcard-diagram svg, .detail-diagram svg { display: block; width: 100%; height: auto; background: #f6f1e6; border: 1px dashed #c9bda6; border-radius: .35rem; }
+.d-label { font: 600 13px var(--sans); fill: #574d43; }
+.d-shift { stroke-width: 1.5; }
+.d-a { fill: #cfe4c8; stroke: #3d7a4c; }
+.d-b { fill: #f9e3a3; stroke: #9a6d00; }
+.d-overlap { fill: rgba(196, 69, 47, .14); stroke: #c4452f; stroke-dasharray: 4 3; }
+.d-note { font: 600 12px var(--sans); fill: #a33a27; }
+.stack-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; max-width: 46rem; margin-top: 1.4rem; }
+.stack-btn { min-height: 44px; padding: .5rem 1.1rem; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--paper);
+  color: var(--ink); font: 600 .9375rem var(--sans); cursor: pointer; }
+.stack-btn:hover { background: var(--ink); color: var(--paper); }
+.card .stack-count { margin: 0; font-weight: 600; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.card .stack-hint { margin: .6rem 0 0; max-width: 46rem; text-align: center; font-size: .8125rem; color: var(--ink-muted); }
+@media (prefers-reduced-motion: no-preference) {
+  .pcard { transition: transform .34s cubic-bezier(.2, .7, .2, 1), background-color .34s; }
+  .pcard.is-dragging { transition: none; }
+  /* Next: the front card is slid off the top of the hand and tucked in at the back. Previous: the back card comes out to the front. */
+  .pcard.is-leaving { z-index: 5; background: #fffdf8; animation: pcard-out .34s cubic-bezier(.4, 0, 1, 1) both; }
+  .pcard.is-arriving { z-index: 5; animation: pcard-in .38s cubic-bezier(.2, .7, .2, 1) both; }
+}
+@keyframes pcard-out { from { transform: translateX(var(--drag, 0px)); opacity: 1; } to { transform: translate(-60%, -1.5rem) rotate(-7deg); opacity: 0; } }
+@keyframes pcard-in { from { transform: translate(-60%, -1.5rem) rotate(-7deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.pull { margin: 0 0 1.5rem; font: 600 clamp(1.3rem, 1.1rem + .9vw, 1.75rem)/1.3 var(--serif); }
+.statement { font: 600 clamp(1.3rem, 1.1rem + .9vw, 1.75rem)/1.3 var(--serif); }
+
+/* Project details: a project's card pulled out of the box to read in full (#/projects/<name>).
+   The Projects tab stays current; "All projects" puts the card back. */
+.card .back-link { margin: 0 0 1rem; font-weight: 600; }
+.back-link a { display: inline-block; padding: .3rem 0; }  /* a target at least 24px tall (WCAG 2.5.8) */
+.project-sub { margin: .5rem 0 0 !important; font-size: 1.125rem; color: var(--ink-muted); }
+.project-shot { margin: 0 0 1.5rem; max-width: 40rem; }
+.project-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--ruling); border-radius: .4rem; box-shadow: 0 2px 10px rgba(31, 26, 21, .12); }
+.project-shot figcaption, .detail-diagram figcaption { margin-top: .45rem; font-size: .875rem; color: var(--ink-muted); }
+.project-facts { max-width: 40rem; margin-bottom: 1.5rem; }
+.project-links { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin: 2rem 0 0; }
+.card .external-note { margin-top: .5rem; font-size: .875rem; color: var(--ink-muted); }
+.card .detail-stat { font-size: 1.0625rem; }
+.detail-stat strong { display: block; font: 600 clamp(2.6rem, 2rem + 2.4vw, 3.6rem)/1 var(--serif); color: var(--c); }
+.detail-list { max-width: 40rem; margin: 0 0 1rem; padding-left: 1.2rem; }
+.detail-list li { margin-bottom: .55rem; }
+.detail-diagram { margin: 0 0 1.25rem; max-width: 26rem; }
+.card code { font-size: .9em; }
+.status { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem 1.75rem; margin-top: .5rem; max-width: 46rem; }
+.status h3 { margin: 0 0 .4rem; font-size: .9375rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+.status ul { margin: 0; padding-left: 1.1rem; font-size: .9688rem; }
+.status li { margin-bottom: .4rem; }
+@media (max-width: 1199px) { .status { grid-template-columns: minmax(0, 1fr); } }
+
+/* The box's front, with Betsy's label, stays at the bottom of the screen; the cards slide down behind it. */
+.box-front { position: sticky; bottom: 0; z-index: 3; height: clamp(3.25rem, 8vw, 6.25rem); margin: 0 calc(var(--wall) * -1);
+  background: url(photos/base-front.jpg) 50% 0 / 100% auto, var(--wood);
+  box-shadow: 0 -.6rem 1rem -.4rem rgba(0, 0, 0, .55); pointer-events: none; }
+.box-front .box-label { --u: clamp(.2rem, .42vw, .3rem); top: 38%; left: 7%; }
+/* Keyboard focus never ends up hidden behind the front of the box (WCAG 2.4.11). */
+html { scroll-padding-bottom: clamp(4.5rem, 10vw, 7.5rem); }
+
+/* Footer: contact, under the box */
+.site-footer { margin-top: 3rem; padding-top: 1.5rem; color: var(--on-table-muted); }
+.site-footer h2 { margin: 0 0 .5rem; font: 600 1.4rem/1.2 var(--serif); color: var(--on-table); }
+.site-footer h2:focus { outline: none; }
+.site-footer p { margin: 0 0 .5rem; }
+.site-footer a { color: var(--on-table); }
+.footer-links { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; padding: 0; margin: .75rem 0 1.5rem; list-style: none; }
+.footer-links a { display: inline-block; padding: .35rem 0; }
+.footer-meta { font-size: .875rem; }
+.link-button { padding: .35rem 0; border: 0; background: none; color: var(--on-table); font: inherit; text-decoration: underline; cursor: pointer; }
+
+@media (max-width: 959px) {
+  .site-header { padding: 1rem 0 .9rem; }
+  .tabs ul { gap: .2rem; padding-inline: 0; }
+  .tab { padding-inline: .85rem; font-size: .9375rem; }
+}
+@media (max-width: 599px) {
+  .portfolio { padding-inline: .5rem; }
+  .site-header { padding-inline: .5rem; }
+  .glance div, .role { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+  .actions .button { flex: 1 1 auto; justify-content: center; }
+  .recipe-stack { padding-right: 1.4rem; }
+  .card-photo { margin-inline: calc(clamp(1.25rem, 4vw, 3.25rem) * -1 + .25rem); }
+}
+@media (max-width: 380px) {
+  .header-actions { width: 100%; }
+  .header-actions .pill { flex: 1 1 0; justify-content: center; }
+}
+/* Short screens in landscape: the box front would take too much of the height, so it scrolls with the page. */
+@media (max-height: 520px) { .box-front { position: relative; } }
